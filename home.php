@@ -51,7 +51,7 @@
 		  <strong><i class="fa fa-warning"></i>Unsuccessful Login</strong> The email or password you entered is incorrect
 		</div>
 		<div id="alertPending" class="alert alert-warning">
-		  <strong><i class="fa fa-warning"></i>Pending</strong> Your account is currently Pedning Approval
+		  <strong><i class="fa fa-warning"></i>Pending</strong> Your account is currently Pending Approval
 		</div>
 		<label for="inputEmail" class="sr-only">Email address</label>
 		<input type="email" id="inputEmail" class="form-control" placeholder="Email address" name="AUTH_EMAIL" required autofocus>

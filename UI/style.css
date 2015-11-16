@@ -10,7 +10,8 @@ body {
 #signOut,
 #alertLoginIncorrectCred, 
 #alertPending, 
-#alertRequestSuccess{
+#alertRequestSuccess,
+#alertRequestFail{
 	display: none;
 }
 i{

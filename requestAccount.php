@@ -10,8 +10,11 @@
 	<form id="requestForm" class="form-requestAccount" action="requestAccount.php" method="post">
 		<h2 class="form-signin-heading">Request Account</h2>
 		<div id="alertRequestSuccess" class="alert alert-success">
-		  <strong><i class="fa fa-warning"></i>Success</strong> Your request has been submitted.
+		  <strong><i class="fa fa-warning"></i>Successful</strong> Your request was successfuly submitted.
 		</div>
+        <div id="alertRequestFail" class="alert alert-fail">
+            <strong><i class="fa fa-warning"></i>Unsuccessful</strong> Your request was not successfully submitted.
+        </div>
 		<label for="inputFirstName" class="sr-only">First Name</label>
 		<input type="text" id="inputFirstName" class="form-control" placeholder="First Name" name="REQ_FIRSTNAME" required autofocus>
 		<label for="inputLastName" class="sr-only">Last Name</label>
@@ -78,6 +81,13 @@
 
 		if($result == null){
 			//request was unsuccessful
+            echo <<<_END
+            <script type="text/javascript">
+            $(document).ready(function(){
+                $('#alertRequestFail').show();
+            });
+            </script>
+_END;
 		}
 		else{
 			//request was successful

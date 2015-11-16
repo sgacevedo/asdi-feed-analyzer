@@ -1,39 +1,12 @@
 <html>
 <head>
-
-	<link rel="stylesheet" href="style.css">
-
-	<!-- Font Awesome (icons) -->
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-
-	<!-- Latest compiled and minified CSS -->
-	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-
-	<!-- jQuery library -->
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-
-	<!-- Latest compiled JavaScript -->
-	<script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
-	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <?php
+        require_once 'UI/styleIncludes.php'; ?>
 	<title>Request Account</title>
 </head>
 <body>
-	<nav class="navbar navbar-default navbar-static-top">
-      <div class="container">
-        <div class="navbar-header">
-          <a class="navbar-brand" href="home.php"><i class="fa fa-plane"></i>ASDI Feed Analyzer</a>
-        </div>
-        <ul class="nav navbar-nav">
-              </ul>
-            </li>
-          </ul>
-          <ul class="nav navbar-nav navbar-right">
-            <li id="requestAccount"><button class="btn btn-info" type="submit"><a href="requestAccount.php">Request Account</a></button></li>
-            <li id="signOut"><a href="#"><i class="fa fa-sign-out"></i>Log Out</a></li>
-          </ul>
-      </div>
-    </nav>
+    <?php
+        require_once 'UI/navBar.php'; ?>
 	<form id="requestForm" class="form-requestAccount" action="requestAccount.php" method="post">
 		<h2 class="form-signin-heading">Request Account</h2>
 		<div id="alertRequestSuccess" class="alert alert-success">

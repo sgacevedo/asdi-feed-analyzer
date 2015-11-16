@@ -9,8 +9,14 @@
             $command = '';
             $numParameters = count($request->fields);
             
+            //UPDATE sql command
+            if($request->type == 'UPDATE'){
+                //construct sql command
+                
+            }
+            
             //INSERT sql command
-            if($request->type == 'INSERT'){
+            else if($request->type == 'INSERT'){
                 //counter
                 $i = 1;
                 

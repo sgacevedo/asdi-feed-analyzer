@@ -14,7 +14,11 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">
-            <li id="requestAccount"><button class="btn btn-info" type="submit"><a href="requestAccount.php">Request Account</a></button></li>
+            <li id="requestAccount">
+                <button class="btn btn-info" type="submit">
+                    <a href="requestAccount.php">Request Account</a>
+                </button>
+            </li>
             <li id="signOut">
                 <form action="home.php" method="post">
                     <input type="hidden" name="LOGOUT" value="yes" />

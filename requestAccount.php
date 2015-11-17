@@ -47,11 +47,7 @@
 		$password = $_POST['REQ_PASSWORD'];
 		$verifyPassword = $_POST['REQ_VERIFY_PASSWORD'];
 
-		//if any field is blank
-		if($firstName == '' || $lastName == '' || $email == '' || $password == ''|| $verifyPassword == ''){
-			echo 'one or more field is blank';
-			return;
-		}
+		//passwords do not match
 		if($password != $verifyPassword){
 			echo 'passwords do not match';
 			return;

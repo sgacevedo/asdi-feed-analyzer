@@ -1,4 +1,4 @@
-<!-- Method Signature: 
+<!-- Method Signature:   *
 approveUser(User u, boolean approval) returns boolean success
 
 Description: Approves user u if approval boolean parameter is true by changing the user status to ‘active’. Denies user u if the approval boolean parameter is false by removing the user from the database.

@@ -6,6 +6,7 @@
 </head>
 <body>
     <?php
+        require_once 'requires.php';
         require_once 'UI/navBar.php'; ?>
 	<form id="requestForm" class="form-requestAccount" action="requestAccount.php" method="post">
 		<h2 class="form-signin-heading">Request Account</h2>
@@ -31,8 +32,17 @@
 </html>
 
 <?php
-	require_once 'requires.php';
-
+    if(isset($_SESSION['user'])){
+        echo <<<_END
+        <script>
+            $(document).ready(function(){
+                $('#requestForm').hide();
+            });
+        </script>
+_END;
+        return;
+    }
+    
 	if(isset($_POST['REQ_FIRSTNAME']) && isset($_POST['REQ_LASTNAME']) && isset($_POST['REQ_EMAIL']) && isset($_POST['REQ_PASSWORD']) && isset($_POST['REQ_VERIFY_PASSWORD'])){
 		$dbMan = new DatabaseManager();
 
@@ -53,7 +63,7 @@
 			return;
 		}
 
-		$user = new User($email, $password);
+		$user = new User($email);
 		$user->firstName = $firstName;
 		$user->lastName = $lastName;
 		$user->password = $password;

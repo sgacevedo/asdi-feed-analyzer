@@ -1,73 +1,76 @@
 body {
-  padding-top: 0px;
-  padding-bottom: 40px;
-  background-color: #eee;
+    padding-top: 0px;
+    padding-bottom: 40px;
+    background-color: #eee;
+}
+.contents{
+    margin: 0 100px;
 }
 #loginForm,
-#account, 
-#query, 
+#account,
+#query,
 #requestAccount,
 #signOut,
-#alertLoginIncorrectCred, 
-#alertPending, 
+#alertLoginIncorrectCred,
+#alertPending,
 #alertRequestSuccess,
 #alertRequestFail{
-	display: none;
+    display: none;
 }
 i{
-	padding-right: 10px;
+    padding-right: 10px;
 }
 #signOut form{
-	margin-bottom: 0;
+    margin-bottom: 0;
 }
 #signOut button{
-	margin-top: 8px;
+    margin-top: 8px;
 }
 #requestAccount{
-  margin-top: 8px;
+    margin-top: 8px;
 }
 #requestAccount button a{
-	color: white;
-	text-decoration: none;
+    color: white;
+    text-decoration: none;
 }
 
-.form-signin, 
+.form-signin,
 .form-requestAccount{
-  max-width: 330px;
-  padding: 15px;
-  margin: 0 auto;
+    max-width: 330px;
+    padding: 15px;
+    margin: 0 auto;
 }
 .form-signin .form-signin-heading,
 .form-requestAccount .form-signin-heading{
-  margin-bottom: 10px;
+    margin-bottom: 10px;
 }
-.form-signin .form-control, 
+.form-signin .form-control,
 .form-requestAccount .form-control{
-  position: relative;
-  height: auto;
-  -webkit-box-sizing: border-box;
-     -moz-box-sizing: border-box;
-          box-sizing: border-box;
-  padding: 10px;
-  font-size: 16px;
+    position: relative;
+    height: auto;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 10px;
+    font-size: 16px;
 }
-.form-signin .form-control:focus, 
+.form-signin .form-control:focus,
 .form-requestAccount .form-control:focus{
-  z-index: 2;
+    z-index: 2;
 }
 .form-signin input[type="email"] {
-  margin-bottom: -1px;
-  border-bottom-right-radius: 0;
-  border-bottom-left-radius: 0;
+    margin-bottom: -1px;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 0;
 }
 .form-signin input[type="password"] {
-  margin-bottom: 10px;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+    margin-bottom: 10px;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
 }
 .form-requestAccount input{
-	margin-bottom: 10px;
+    margin-bottom: 10px;
 }
 .form-requestAccount button{
-	margin-top: 20px;
+    margin-top: 20px;
 }

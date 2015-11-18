@@ -4,7 +4,12 @@
             <a class="navbar-brand" href="home.php"><i class="fa fa-plane"></i>ASDI Feed Analyzer</a>
         </div>
         <ul class="nav navbar-nav">
-            <li id="account" ><a href="#about">Account</a></li>
+            <li id="account" class="dropdown">
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account<span class="caret"></span></a>
+                <ul class="dropdown-menu">
+                    <li><a href="manageAccounts.php">Approve Users</a></li>
+                </ul>
+            </li>
             <li id="query" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Query<span class="caret"></span></a>
                 <ul class="dropdown-menu">
@@ -28,3 +33,37 @@
         </ul>
     </div>
 </nav>
+
+<?php
+    session_start();
+	
+	//user is already logged in
+    if(isset($_SESSION['user'])){
+		echo <<<_END
+		<script type="text/javascript">
+		$(document).ready(function(){
+		  $('#account').show();
+		  $('#query').show();
+		  $('#signOut').show();
+		});
+		</script>
+_END;
+		
+        $user;
+
+        $userEmail = $_SESSION['user']->email;
+
+        if($_SESSION['user']->type == 'SUPER_USER'){
+            $user = new SuperUser($userEmail);
+            $user->type = 'SUPER_USER';
+        }
+        else if($_SESSION['user']->type == 'ADMINISTRATOR'){
+            $user = new Administrator($userEmail);
+            $user->type = 'ADMINISTRATOR';
+        }
+        else if($_SESSION['user']->type == 'GENERAL_USER'){
+            $user = new GeneralUser($userEmail);
+            $user->type = 'GENERAL_USER';
+        }
+    }
+?>

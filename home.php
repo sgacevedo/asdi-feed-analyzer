@@ -6,6 +6,7 @@
 </head>
 <body>
 	<?php
+        require_once 'requires.php';
         require_once 'UI/navBar.php'; ?>
 	<form id="loginForm" class="form-signin" action="home.php" method="post">
 		<h2 class="form-signin-heading">Log in</h2>
@@ -24,8 +25,7 @@
 </body>
 </html>
 
-<?php 
-require_once 'requires.php';
+<?php
 
 $dbMan = new DatabaseManager();
 		
@@ -34,25 +34,14 @@ if(!$dbMan->establishConnection()){
 	return;
 }
 
-session_start();
-if(isset($_POST['LOGOUT'])){
-	destroy_session_and_data();
-	echo <<<_END
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$('#loginForm').show();
-				$('#requestAccount').show();
-			});
-		</script>
-_END;
-}
 
-//if the AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user
-else if (isset($_POST['AUTH_EMAIL']) && isset($_POST['AUTH_PASSWORD']))
+//if the a session user variable is not set and AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user
+if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AUTH_PASSWORD']))
 {
 	
 	//create new user instance
-	$user = new User($_POST['AUTH_EMAIL'], $_POST['AUTH_PASSWORD']);
+	$user = new User($_POST['AUTH_EMAIL']);
+    $user->password = $_POST['AUTH_PASSWORD'];
 	
 	//check login credentials
 	$email_temp = mysql_entities_fix_string($dbMan->connection, $_POST['AUTH_EMAIL']);
@@ -82,6 +71,8 @@ else if (isset($_POST['AUTH_EMAIL']) && isset($_POST['AUTH_PASSWORD']))
 			//sucessful login
 			if($row[6] == 'ACTIVE'){
 				echo'success';
+                $user->type = $row[5];
+                
 				$_SESSION['user'] = $user;
 				echo <<<_END
 				<script type="text/javascript">
@@ -132,31 +123,30 @@ _END;
 	}
 }
 
-//already logged in
-else if (isset($_SESSION['user']))
-{
-	$email = $_SESSION['user']->email;
-
-	echo 'logged in as: '. $email;
-	echo <<<_END
-		<script type="text/javascript">
-			$(document).ready(function(){
-				$('#account').show();
-				$('#query').show();
-				$('#signOut').show();
-			});
-		</script>
+//user clicked logout button
+else if(isset($_POST['LOGOUT'])){
+    destroy_session_and_data();
+    echo <<<_END
+    <script type="text/javascript">
+    $(document).ready(function(){
+        $('#loginForm').show();
+        $('#requestAccount').show();
+        $('#signOut').hide();
+        $('#account').hide();
+        $('#query').hide();
+    });
+    </script>
 _END;
 }
 
 //otherwise - not logged in
-else
+else if(!isset($_SESSION['user']))
 {
 	echo <<<_END
 		<script type="text/javascript">
 			$(document).ready(function(){
 				$('#loginForm').show();
-				$('#requestAccount').show();	
+				$('#requestAccount').show();
 			});
 		</script>
 _END;
@@ -173,9 +163,8 @@ function mysql_fix_string($connection, $string)
 }
 function destroy_session_and_data()
 {
-	$_SESSION = array();
-	setcookie(session_name(), '', time() - 2592000, '/');
-	session_destroy();
+    $_SESSION = array();
+    setcookie(session_name(), '', time() - 2592000, '/');
+    session_destroy();
 }
-
 ?>

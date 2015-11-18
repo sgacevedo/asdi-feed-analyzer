@@ -6,11 +6,11 @@ class User
 	public $email;
 	public $password;
 	public $hashedPassword;
+    public $type;
 	
 	//constuctor
-	public function __construct($email, $password){
+	public function __construct($email){
 		$this->email = $email;
-		$this->password = $password;
 	}	
 }
 ?>

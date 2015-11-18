@@ -20,11 +20,11 @@ $link = mysql_connect ( "earth.cs.utep.edu", "cs_aegomez2", "utep$234" );
 mysql_select_db ( "cs_aegomez2", $link );
 
 // query blog title and text
-$query = "UPDATE se_Users SET status = 'ACTIVE' WHERE user_id=" . $_POST ["user_id"] . "';";
+$query = "UPDATE se_Users SET status = 'ACTIVE' WHERE user_id=" . $_POST ["userID"] . "';";
 $result = mysql_query ( $query );
 
 // print event title and text
-echo "User with id ".$_POST["user_id"]." has been approved.";
+echo "User with id ".$_POST["userID"]." has been approved.";
 ?>
 
 </body>

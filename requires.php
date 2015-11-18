@@ -9,4 +9,7 @@
     
 	//User Account Subsystem
 	require_once 'Objects/User Account Subsystem/User.php';
+    require_once 'Objects/User Account Subsystem/SuperUser.php';
+    require_once 'Objects/User Account Subsystem/Administrator.php';
+    require_once 'Objects/User Account Subsystem/GeneralUser.php';
 ?>

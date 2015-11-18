@@ -11,8 +11,34 @@
             
             //UPDATE sql command
             if($request->type == 'UPDATE'){
-                //construct sql command
                 
+                $command = 'UPDATE ' . $request->dbTable . ' SET status = ' . $request->fields['status'] . ' WHERE user_id = ' . $request->fields['user_id'];
+                
+            }
+            
+            //DELETE sql command
+            else if($request->type == 'DELETE'){
+                //counter
+                $i = 1;
+                
+                //command - sql sting
+                $command = 'DELETE FROM ' . $request->dbTable;
+                
+                //if there are parameters for where clause
+                if(count($request->fields) > 0){
+                    
+                    $command = $command . ' WHERE ';
+                    
+                    //for each item in the array
+                    foreach($request->fields as $field => $value) {
+                        $command = $command . $field . ' = "' . $value . '" ';
+                        
+                        //if not last element in array - add 'AND '
+                        if($i++ != $numParameters) {
+                            $command = $command . 'AND ';
+                        }
+                    }
+                }
             }
             
             //INSERT sql command
@@ -53,15 +79,21 @@
                 $i = 1;
                 
                 //command - sql sting
-                $command = 'SELECT * FROM ' . $request->dbTable . ' WHERE ';
+                $command = 'SELECT * FROM ' . $request->dbTable;
                 
-                //for each item in the array
-                foreach($request->fields as $field => $value) {
-                    $command = $command . $field . ' = "' . $value . '" ';
+                //if there are parameters for where clause
+                if(count($request->fields) > 0){
                     
-                    //if not last element in array - add 'AND '
-                    if($i++ != $numParameters) {
-                        $command = $command . 'AND ';
+                    $command = $command . ' WHERE ';
+                
+                    //for each item in the array
+                    foreach($request->fields as $field => $value) {
+                        $command = $command . $field . ' = "' . $value . '" ';
+                        
+                        //if not last element in array - add 'AND '
+                        if($i++ != $numParameters) {
+                            $command = $command . 'AND ';
+                        }
                     }
                 }
             }

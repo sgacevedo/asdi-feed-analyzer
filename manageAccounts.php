@@ -17,97 +17,127 @@ Post-Condition:
 	<title>Manage User Accounts</title>
 </head>
 <body>
+
     <?php
+		require_once 'requires.php';
         require_once 'UI/navBar.php'; ?>
-   <?php 
-$link = mysql_connect("earth.cs.utep.edu", "cs_aegomez2", "utep$234");
-mysql_select_db("cs_aegomez2",$link);
 
-$query="SELECT user_id, firstName, lastName, email, type, status FROM se_Users WHERE status='PENDING_APPROVAL'";
-$result=mysql_query($query);
-$num=mysql_numrows($result);mysql_close();
+	<div class="contents">
+		<?php
+			
+			if(isset($_POST['approveUser'])){
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request('UPDATE', 'se_Users');
+				$request->addParameter('user_id', $_POST['approveUser']);
+				$request->addParameter('status', '"ACTIVE"');
+				$request->transformCommand();
+				
+				$results = $dbMan->executeQuery($request);
+				
+				if($results != null){
+					//successfully approved
+				}
+				
+			}
+			else if(isset($_POST['denyUser'])){
+				
+				echo 'approve';
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request('DELETE', 'se_Users');
+				$request->addParameter('user_id', $_POST['approveUser']);
+				$request->transformCommand();
+				
+				$results = $dbMan->executeQuery($request);
+				
+				if($results != null){
+					//successfully denied
+					
+				}
+			}
+			
+			if($_SESSION['user']->type == 'SUPER_USER'){
+				
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request('SELECT *', 'se_Users');
+				$request->addParameter('status', 'PENDING_APPROVAL');
+				$request->transformCommand();
+				
+				$results = $dbMan->executeQuery($request);
+				
+				if($results == null){
+					//request failed
+				}
+				
+				$rows = $results->num_rows;?>
+		<h1>Pending Accounts</h1>
+		<table class="table table-hover">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>E-mail</th>
+					<th>Type</th>
+					<th>Status</th>
+					<th>Approve User?</th>
+					<th>Deny User?</th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php
+				for ($i = 0 ; $i < $rows ; ++$i){
+					$results->data_seek($i);
+					$row = $results->fetch_array(MYSQLI_NUM);
+					
+					$user_id = $row[0];
+					$name = $row[1] . ' ' . $row[2];
+					$email = $row[3];
+					$type = $row[5];
+					$status = $row[6];
+			?>
+				<tr>
+					<td><?php echo $name; ?></td>
+					<td><?php echo $email; ?></td>
+					<td><?php echo $type; ?></td>
+					<td><?php echo $status ?></td>
+					<td><?php
+							echo <<<_END
+						<form action="manageAccounts.php" method="POST">
+							<button type="submit" class="btn btn-success">Approve</button>
+							<input type="hidden" name="approveUser" value='$user_id'>
+						</form>
+_END
 ?>
-<table border="1px solid black" cellspacing="2" cellpadding="2">
-<tr>
-<td>
-<font face="Arial, Helvetica, sans-serif">User ID</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">First Name</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">Last Name</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">E-mail</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">Type</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">Status</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">Approve User?</font>
-</td>
-<td>
-<font face="Arial, Helvetica, sans-serif">Deny User?</font>
-</td>
-</tr>
-<?php $i=0;while ($i < $num) {
-$f1=mysql_result($result,$i,"user_id");
-$f2=mysql_result($result,$i,"firstName");
-$f3=mysql_result($result,$i,"lastName");
-$f4=mysql_result($result,$i,"email");
-$f5=mysql_result($result,$i,"type");
-$f6=mysql_result($result,$i,"status");
-
+					</td>
+					<td><?php
+							echo <<<_END
+						<form action="manageAccounts.php" method="POST"?>
+							<button type="submit" class="btn btn-danger">Deny</button>
+							<input type="hidden" name="denyUser" value='$user_id'>
+						</form>
+_END
 ?>
-<tr>
-<td>
-<?php echo $f1; ?>
-</td>
-<td>
-<?php echo $f2; ?>
-</td>
-<td>
-<?php echo $f3; ?>
-</td>
-<td>
-<?php echo $f4; ?>
-</td>
-<td>
-<?php echo $f5; ?>
-</td>
-<td>
-<?php echo $f6?>
-</td>
-<td>
-<?php 
-echo '<form action="approved.php" method="POST"?>
-    	<input type="submit" value="Approve">
-    		<input type="hidden" name="userID" value='.$f1.'>
-		</form>'; 
-?>
-</td>
-<td>
-<?php 
-echo '<form action="denied.php" method="POST"?>
-    	<input type="submit" value="Deny">
-    		<input type="hidden" name="userID" value='.$f1.'>
-		</form>'; 
-?>
-</td>
-</tr>
-<?php $i++;}?>
-        
-        
+					</td>
+				</tr>
+				<?php }}?>
+			</tbody>
+		</table>
+	</div>
 </body>
 </html>
-
-<?php
-    require_once 'requires.php';
-    
-    
-    
-?>

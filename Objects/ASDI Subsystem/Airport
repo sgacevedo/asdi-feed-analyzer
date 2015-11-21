@@ -1,15 +1,15 @@
 <?php
 
 
-
-
 class Airport {
     private $name;
     private $city;
     private $icaoCode;
     private $faaId;
 
-    public function __construct($theName, $theCity, $theIcaoCode, $theFaaId)
+    public function __construct(){} // allocate fields and functions
+
+    public function create($theName, $theCity, $theIcaoCode, $theFaaId)
     {
         $this->setName($theName);
         $this->setCity($theCity);

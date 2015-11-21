@@ -8,16 +8,21 @@ require_once '../../Objects/ASDI Subsystem/Airport';
 class AirportTest extends PHPUnit_Framework_TestCase
 {
 
-    public $testAirport ;
+    public $testAirport;
     public $name = "test Airport name";
     public $city = "test City name";
     public $icaoCode = "test ICAO Code";
     public $faaId = "test FAA Identification";
 
+    public function createAirport()
+    {
+        return new Airport();
+    }
+
     public function setUp()
     {
-        $this->testAirport = new Airport($this->name, $this->city, $this->icaoCode, $this->faaId);
-        settype($this->testAirport, "Airport");
+        $this->testAirport = $this->createAirport();
+        $this->testAirport->create($this->name, $this->city,$this->icaoCode, $this->faaId);
     }
 
 

@@ -1,0 +1,66 @@
+<?php
+
+
+
+
+class Airport {
+    private $name;
+    private $city;
+    private $icaoCode;
+    private $faaId;
+
+    public function __construct($theName, $theCity, $theIcaoCode, $theFaaId)
+    {
+        $this->setName($theName);
+        $this->setCity($theCity);
+        $this->setIcaoCode($theIcaoCode);
+        $this->setFaaId($theFaaId);
+    }
+
+
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    public function getCity()
+    {
+        return $this->city;
+    }
+
+    public function setCity($city)
+    {
+        $this->city = $city;
+    }
+
+    public function getIcaoCode()
+    {
+        return $this->icaoCode;
+    }
+
+    public function setIcaoCode($icaoCode)
+    {
+        $this->icaoCode = $icaoCode;
+    }
+
+    public function getFaaId()
+    {
+        return $this->faaId;
+    }
+
+    public function setFaaId($faaId)
+    {
+        $this->faaId = $faaId;
+    }
+
+
+
+
+
+
+}

@@ -10,7 +10,7 @@
             $numParameters = count($request->fields);
             
             //UPDATE sql command
-            if($request->type == 'UPDATE'){
+            if($request->type == 'UPDATE status'){
                 
                 $command = 'UPDATE ' . $request->dbTable . ' SET status = ' . $request->fields['status'] . ' WHERE user_id = ' . $request->fields['user_id'];
                 

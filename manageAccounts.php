@@ -1,15 +1,3 @@
-<!-- Method Signature: 
-approveUser(User u, boolean approval) returns boolean success
-
-Description: Approves user u if approval boolean parameter is true by changing the user status to ‘active’. Denies user u if the approval boolean parameter is false by removing the user from the database.
-
-Pre-Condition: 
-//@requires u != null && !(userLog.contains(u))
-
-Post-Condition: 
-//@ensures userLog.contains(u)
- -->
-
 <html>
 <head>
     <?php
@@ -33,7 +21,7 @@ Post-Condition:
 					return;
 				}
 				
-				$request = new Request('UPDATE', 'se_Users');
+				$request = new Request('UPDATE status', 'se_Users');
 				$request->addParameter('user_id', $_POST['approveUser']);
 				$request->addParameter('status', '"ACTIVE"');
 				$request->transformCommand();

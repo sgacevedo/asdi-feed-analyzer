@@ -1,0 +1,282 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1348\cocoasubrtf170
+{\fonttbl\f0\fnil\fcharset0 Menlo-Bold;\f1\fnil\fcharset0 Menlo-Regular;}
+{\colortbl;\red255\green255\blue255;}
+\margl1440\margr1440\vieww17280\viewh7700\viewkind0
+\pard\tx560\tx1120\tx1680\tx2240\tx2800\tx3360\tx3920\tx4480\tx5040\tx5600\tx6160\tx6720\pardirnatural
+
+\f0\b\fs36 \cf0 \CocoaLigature0 se_Users
+\f1\b0\fs22  - stores user attributes. \
+	- Every user has a unique id user_id which auto_increments. \
+	- Passwords are hashed\
+\
+mysql> DESCRIBE se_Users;\
++-----------+---------------------------------------------------+------+-----+---------+----------------+\
+| Field     | Type                                              | Null | Key | Default | Extra          |\
++-----------+---------------------------------------------------+------+-----+---------+----------------+\
+| user_id   | int(11)                                           | NO   | PRI | NULL    | auto_increment |\
+| firstName | varchar(32)                                       | NO   |     | NULL    |                |\
+| lastName  | varchar(32)                                       | NO   |     | NULL    |                |\
+| email     | varchar(128)                                      | NO   |     | NULL    |                |\
+| password  | varchar(32)                                       | NO   |     | NULL    |                |\
+| type      | enum('SUPER_USER','ADMINISTRATOR','GENERAL_USER') | YES  |     | NULL    |                |\
+| status    | enum('ACTIVE','PENDING_APPROVAL')                 | YES  |     | NULL    |                |\
++-----------+---------------------------------------------------+------+-----+---------+----------------+\
+7 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Airline_Restrictions
+\f1\b0\fs22  - stores the user restrictions related to airlines.\
+\
+	
+\f0\b FOREIGN KEYS:\
+	
+\f1\b0 - airline_name REFERENCES airline_name in the se_Airlines table.\
+\
+mysql> DESCRIBE se_Airline_Restrictions;\
++----------------+--------------+------+-----+---------+----------------+\
+| Field          | Type         | Null | Key | Default | Extra          |\
++----------------+--------------+------+-----+---------+----------------+\
+| restriction_id | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| user_id        | int(11)      | NO   | MUL | NULL    |                |\
+| airline_name   | varchar(128) | NO   | MUL | NULL    |                |\
++----------------+--------------+------+-----+---------+----------------+\
+3 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Airspace_Restriction
+\f1\b0\fs22  - stores the user restrictions related to airspace.\
+\
+	
+\f0\b FOREIGN KEYS:\
+	
+\f1\b0 - airspace_id REFERENCES airspace_id in the se_Airspace table.\
+\
+mysql> DESCRIBE se_Airspace_Restrictions;\
++----------------+---------+------+-----+---------+----------------+\
+| Field          | Type    | Null | Key | Default | Extra          |\
++----------------+---------+------+-----+---------+----------------+\
+| restriction_id | int(11) | NO   | PRI | NULL    | auto_increment |\
+| user_id        | int(11) | NO   | MUL | NULL    |                |\
+| airspace_id    | int(11) | NO   | MUL | NULL    |                |\
++----------------+---------+------+-----+---------+----------------+\
+3 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Airlines
+\f1\b0\fs22  - stores names and headquarter address of airlines\
+\
+mysql> DESCRIBE se_Airlines;\
++--------------+--------------+------+-----+---------+-------+\
+| Field        | Type         | Null | Key | Default | Extra |\
++--------------+--------------+------+-----+---------+-------+\
+| airline_name | varchar(128) | NO   | PRI | NULL    |       |\
+| hq_address   | varchar(128) | NO   |     | NULL    |       |\
++--------------+--------------+------+-----+---------+-------+\
+2 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Airports
+\f1\b0\fs22  - stores airport name, city, state (Abbreviation), region, lat and long\
+\
+mysql> DESCRIBE se_Airports;\
++--------------+--------------+------+-----+---------+-------+\
+| Field        | Type         | Null | Key | Default | Extra |\
++--------------+--------------+------+-----+---------+-------+\
+| airport_name | varchar(128) | NO   | PRI | NULL    |       |\
+| city         | varchar(32)  | NO   |     | NULL    |       |\
+| state        | char(2)      | NO   |     | NULL    |       |\
+| region       | varchar(128) | NO   |     | NULL    |       |\
+| latitude     | decimal(5,2) | NO   |     | NULL    |       |\
+| longitude    | decimal(5,2) | NO   |     | NULL    |       |\
++--------------+--------------+------+-----+---------+-------+\
+6 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Airspace
+\f1\b0\fs22  - stores airspace attributes.\
+	- Every airspace has a unique id \'91airspace_id\'92 which auto increments\
+\
+mysql> DESCRIBE se_Airspace;\
++----------------+--------------+------+-----+---------+----------------+\
+| Field          | Type         | Null | Key | Default | Extra          |\
++----------------+--------------+------+-----+---------+----------------+\
+| airspace_id    | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| beginning_lat  | decimal(5,2) | NO   |     | NULL    |                |\
+| beginning_long | decimal(5,2) | NO   |     | NULL    |                |\
+| ending_lat     | decimal(5,2) | NO   |     | NULL    |                |\
+| ending_long    | decimal(5,2) | NO   |     | NULL    |                |\
++----------------+--------------+------+-----+---------+----------------+\
+5 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Amendment
+\f1\b0\fs22  - stores amendment attributes.\
+	- for every cancelation there exists an amendment.\
+	- Every amendment has a unique id \'91amendment_id\'92 which auto increments\
+\
+
+\f0\b 	FOREIGN KEY: \
+
+\f1\b0 	- cancelation_id REFERENCES cancelation_id in the se_Cancelation table.\
+\
+mysql> DESCRIBE se_Amendment;\
++-----------------------+---------+------+-----+---------+----------------+\
+| Field                 | Type    | Null | Key | Default | Extra          |\
++-----------------------+---------+------+-----+---------+----------------+\
+| amendment_id          | int(11) | NO   | PRI | NULL    | auto_increment |\
+| cancelation_id        | int(11) | NO   | MUL | NULL    |                |\
+| amendment_description | text    | NO   |     | NULL    |                |\
++-----------------------+---------+------+-----+---------+----------------+\
+3 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Arrival
+\f1\b0\fs22  - stores arrival date, time, airport, and associated flight\
+	- Every arrival entry has a unique id \'91arrival_id\'92 which auto increments.\
+\
+	
+\f0\b FOREIGN KEYS:\
+	
+\f1\b0 - airport_name REFERENCES airport_name in the se_Airports table.\
+\
+mysql> DESCRIBE se_Arrival;\
++--------------+--------------+------+-----+---------+----------------+\
+| Field        | Type         | Null | Key | Default | Extra          |\
++--------------+--------------+------+-----+---------+----------------+\
+| arrival_id   | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| arrival_date | date         | NO   |     | NULL    |                |\
+| arrival_time | time         | NO   |     | NULL    |                |\
+| airport_name | varchar(128) | NO   | MUL | NULL    |                |\
++--------------+--------------+------+-----+---------+----------------+\
+4 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Cancelation
+\f1\b0\fs22  - stores cancelation message attributes;\
+\
+	
+\f0\b FOREIGN KEYS:\
+	
+\f1\b0 - cancelation_location REFERENCES airspace_id in the se_Airspace table.\
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+\
+mysql> DESCRIBE se_Cancelation;\
++----------------------+---------+------+-----+---------+----------------+\
+| Field                | Type    | Null | Key | Default | Extra          |\
++----------------------+---------+------+-----+---------+----------------+\
+| cancelation_id       | int(11) | NO   | PRI | NULL    | auto_increment |\
+| cancelation_time     | time    | NO   |     | NULL    |                |\
+| cancelation_location | int(11) | NO   | MUL | NULL    |                |\
+| flight_number        | int(11) | NO   | MUL | NULL    |                |\
++----------------------+---------+------+-----+---------+----------------+\
+4 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Crossing
+\f1\b0\fs22  - flight sends a message of this type identifying the time, the airspace its leaving and the one it just crossed into.\
+\
+	
+\f0\b FOREIGN KEYS:\
+	
+\f1\b0 - exit_airspace_id REFERENCES airspace_id in the se_Airspace table.\
+	- entry_airspace_id REFERENCES airspace_id in the se_Airspace table.\
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+\
+mysql> DESCRIBE se_Crossing;\
++-------------------+---------+------+-----+---------+----------------+\
+| Field             | Type    | Null | Key | Default | Extra          |\
++-------------------+---------+------+-----+---------+----------------+\
+| crossing_id       | int(11) | NO   | PRI | NULL    | auto_increment |\
+| crossing_time     | time    | NO   |     | NULL    |                |\
+| exit_airspace_id  | int(11) | NO   | MUL | NULL    |                |\
+| entry_airspace_id | int(11) | NO   | MUL | NULL    |                |\
+| flight_number     | int(11) | NO   | MUL | NULL    |                |\
++-------------------+---------+------+-----+---------+----------------+\
+5 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Departure
+\f1\b0\fs22  - stores departure date, time, airport, and associated flight\
+\
+
+\f0\b 	FOREIGN KEYS:\
+	
+\f1\b0 - airport_name REFERENCES airport_name in the se_Airport table.\
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+\
+mysql> DESCRIBE se_Departure;\
++----------------+--------------+------+-----+---------+----------------+\
+| Field          | Type         | Null | Key | Default | Extra          |\
++----------------+--------------+------+-----+---------+----------------+\
+| departure_id   | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| departure_date | date         | NO   |     | NULL    |                |\
+| departure_time | time         | NO   |     | NULL    |                |\
+| airport_name   | varchar(128) | NO   | MUL | NULL    |                |\
++----------------+--------------+------+-----+---------+----------------+\
+4 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_FlightPlan
+\f1\b0\fs22  - stores flight plan attributes;\
+\
+	
+\f0\b FOREIGN KEY:
+\f1\b0 \
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+\
+mysql> DESCRIBE se_FlightPlan;\
++---------------+--------------+------+-----+---------+----------------+\
+| Field         | Type         | Null | Key | Default | Extra          |\
++---------------+--------------+------+-----+---------+----------------+\
+| flightPlan_id | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| flight_number | varchar(128) | NO   | MUL | NULL    |                |\
++---------------+--------------+------+-----+---------+----------------+\
+2 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Flights
+\f1\b0\fs22  - ;\
+\
+
+\f0\b 	FOREIGN KEYS:
+\f1\b0 \
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+	- airline_name REFERENCES airline_name in the se_Airlines table.\
+	- departure_id REFERENCES departure_id in the se_Departure table.\
+	- arrival_id REFERENCES arrival_id in the se_Arrival table.\
+\
+mysql> DESCRIBE se_Flights;\
++---------------+--------------+------+-----+---------+-------+\
+| Field         | Type         | Null | Key | Default | Extra |\
++---------------+--------------+------+-----+---------+-------+\
+| flight_number | varchar(128) | NO   | PRI | NULL    |       |\
+| airline_name  | varchar(128) | NO   | MUL | NULL    |       |\
+| departure_id  | int(11)      | NO   | MUL | NULL    |       |\
+| arrival_id    | int(11)      | NO   | MUL | NULL    |       |\
++---------------+--------------+------+-----+---------+-------+\
+4 rows in set (0.00 sec)\
+\
+
+\f0\b\fs36 se_Tracking
+\f1\b0\fs22  - flight sends a message of this type in 1 minute intervals identifying itself, the current time, and the airspace it is currently in.\
+\
+	
+\f0\b FOREIGN KEYS:
+\f1\b0 \
+	- flight_number REFERENCES flight_number in the se_Flights table.\
+	- airspace_id REFERENCES airspace_id in the se_Airspace table.\
+\
+mysql> DESCRIBE se_Tracking;\
++---------------+--------------+------+-----+---------+----------------+\
+| Field         | Type         | Null | Key | Default | Extra          |\
++---------------+--------------+------+-----+---------+----------------+\
+| tracking_id   | int(11)      | NO   | PRI | NULL    | auto_increment |\
+| flight_number | int(11)      | NO   | MUL | NULL    |                |\
+| airspace_id   | int(11)      | NO   | MUL | NULL    |                |\
+| entry_time    | time         | NO   |     | NULL    |                |\
+| exit_time     | time         | YES  |     | NULL    |                |\
+| altitude      | decimal(6,2) | YES  |     | NULL    |                |\
++---------------+--------------+------+-----+---------+----------------+\
+6 rows in set (0.00 sec)\
+\
+}

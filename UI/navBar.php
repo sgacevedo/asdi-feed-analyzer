@@ -10,12 +10,8 @@
                     <li><a href="manageAccounts.php">Approve Users</a></li>
                 </ul>
             </li>
-            <li id="query" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Query<span class="caret"></span></a>
-                <ul class="dropdown-menu">
-                    <li><a href="#">Create Report</a></li>
-                    <li><a href="#">Create Model</a></li>
-                </ul>
+            <li id="query">
+            	<a href="query.php">Query</a>
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right">

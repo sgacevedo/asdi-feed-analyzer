@@ -24,6 +24,7 @@ class DatabaseManager
 	}
 	
 	public function executeQuery($request){	
+		//echo '|' . $request->command . '|';
 		//execute query;
 		$result = $this->connection->query($request->command);
 		

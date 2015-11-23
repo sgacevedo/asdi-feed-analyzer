@@ -13,20 +13,48 @@
 	<div class="contents">
 		<?php
 			
-            //appove User button has been selected
 			if(isset($_POST['approveUser'])){
-                $userId = $_POST['approveUser'];
-                $approved = $user->approveUser($userId, true);
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request('UPDATE status', 'se_Users');
+				$request->addParameter('user_id', $_POST['approveUser']);
+				$request->addParameter('status', '"ACTIVE"');
+				$request->transformCommand();
+				
+				$results = $dbMan->executeQuery($request);
+				
+				if($results != null){
+					//successfully approved
+				}
+				
 			}
-            
-            //deny user button has been selected
 			else if(isset($_POST['denyUser'])){
-                $userId = $_POST['denyUser'];
-                $approved = $user->approveUser($userId, false);
+				
+				echo 'approve';
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request('DELETE', 'se_Users');
+				$request->addParameter('user_id', $_POST['approveUser']);
+				$request->transformCommand();
+				
+				$results = $dbMan->executeQuery($request);
+				
+				if($results != null){
+					//successfully denied
+					
+				}
 			}
 			
-            /*if the type of uer logged in is 'super user' -
-             * display all accounts in the database that are pending approval */
 			if($_SESSION['user']->type == 'SUPER_USER'){
 				
 				$dbMan = new DatabaseManager();

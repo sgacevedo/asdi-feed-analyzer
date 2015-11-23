@@ -5,6 +5,7 @@
 	// Database Subsystem
 	require_once 'Objects/Database Subsystem/CommandConstructor.php';
 	require_once 'Objects/Database Subsystem/DatabaseManager.php';
+	require_once 'Objects/Database Subsystem/ASDICommandConstructor.php';
     require_once 'Objects/Database Subsystem/UserCommandConstructor.php';
     
 	//User Account Subsystem

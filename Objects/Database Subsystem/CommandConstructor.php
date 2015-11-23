@@ -18,6 +18,15 @@ class CommandConstructor
             $command = $UserCC->transformCommand($request);
         }
         
+        else if($request->dbTable == 'se_Flights'){
+        	
+        	//create ASDICommandConstructor instance
+        	$asdiCC = new ASDICommandConstructor();
+        	
+        	//transform command
+        	$command = $asdiCC->transformCommand($request);
+        }
+        
         //assign the request's command field to new command string
 		$request->command = $command;
 	}

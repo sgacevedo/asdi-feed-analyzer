@@ -3,8 +3,11 @@ body {
     padding-bottom: 40px;
     background-color: #eee;
 }
+.table{display: table;}
+.table-row{display: table-row;}
+.table-cell{display: table-cell;}
 .contents{
-    margin: 0 100px;
+    margin: 40px 150px;
 }
 #loginForm,
 #account,
@@ -73,4 +76,10 @@ i{
 }
 .form-requestAccount button{
     margin-top: 20px;
+}
+
+.daterangepicker .calendar {
+  display: none;
+  max-width: 370px !important;
+  margin: 4px;
 }

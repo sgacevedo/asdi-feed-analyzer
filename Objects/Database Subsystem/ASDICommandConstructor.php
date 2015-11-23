@@ -27,7 +27,8 @@
 					."WHERE (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "
 						."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
 						."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
-					."GROUP BY f.airline_name;";
+					."GROUP BY f.airline_name " 
+					."ORDER BY COUNT(f.airline_name) DESC;";
         	
         	return $command;
         }

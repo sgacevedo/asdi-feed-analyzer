@@ -8,8 +8,6 @@
         <?php
             require_once 'requires.php';
             require_once 'UI/navBar.php'; ?>
-        <?php 
-        	require_once 'runQuery.php';?>
 		<script type="text/javascript" src="queryScripts.js" ></script>
         <div class="contents">
         	<h1>Analyze</h1>
@@ -36,7 +34,7 @@
 							<label><input type="checkbox" name="AIRLINE_DELAYS" value="" checked>List in order the airlines with the most delays</label>
 						</div>
 						<div id="airlineRegion" class="disabled">
-							<label for="region">Region: </label>
+							<label for="region">Departure region: </label>
 						    <select name="AIRLINE_REGION" class="form-control" id="region" style="width: 400px" disabled>
 						    	<option value="west">West</option>
 						        <option value="south">South</option>
@@ -57,26 +55,26 @@
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
       				</form>
-      				<div class="results"></div>
+      				<div class="results"><?php require_once 'Queries/AirlineQuery.php';?></div>
     			</div>
    				<div id="airports" class="tab-pane fade">
-      				<h3>Menu 1</h3>
+      				<h3>Airports</h3>
       				<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
     			</div>
     			<div id="airspace" class="tab-pane fade">
-      				<h3>Menu 2</h3>
+      				<h3>Airspace</h3>
       				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
     			</div>
     			<div id="flights" class="tab-pane fade">
-      				<h3>Menu 3</h3>
+      				<h3>Flights</h3>
       				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
     			</div>
     			<div id="messages" class="tab-pane fade">
-      				<h3>Menu 3</h3>
+      				<h3>Messages</h3>
       				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
     			</div>
     			<div id="regions" class="tab-pane fade">
-      				<h3>Menu 3</h3>
+      				<h3>Regions</h3>
       				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
     			</div>
   			</div>

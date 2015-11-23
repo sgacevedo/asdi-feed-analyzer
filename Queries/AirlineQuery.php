@@ -1,6 +1,5 @@
 <?php	
 	$table = '';
-	$selector = '';
 	
 	//if the start date and end date range is set
 	if(isset($_POST['AIRLINE_STARTDATE']) && isset($_POST['AIRLINE_ENDDATE'])){
@@ -47,6 +46,7 @@
 							.'<th>Region</th>'
 							.'<th>Filed Depart Time</th>'
 							.'<th>Flown Depart Time</th>'
+							.'<th>Delayed</th>'
 						.'</tr>'
 					.'</thead>'
 					.'<tbody>';
@@ -59,7 +59,9 @@
 		}
 		else{
 			$rows = $results->num_rows;
-			$selector = '#airlines .results';
+			$total = 0;
+			$delays = 0;
+			
 			for ($i = 0 ; $i < $rows ; ++$i){
 				$results->data_seek($i);
 				$row = $results->fetch_array(MYSQLI_NUM);
@@ -69,23 +71,27 @@
 					
 					$table = $table . '<td>'. $row[$j] .'</td>';
 				}
-				$table = $table . '</tr>';
+				
+				if($request->type == 'getProbabilityOfDelay'){
+					$total++;
+					if($row[5] < $row[6]){
+						$table = $table . '<td><span class="label label-danger">Delayed</span></td></tr>';
+						$delays++;
+					}
+					else{
+						$table = $table . '<td><span class="label label-success">On-Time</span></td></tr>';
+					}
+				}
 	
 			}
 			$table = $table . '</tbody></table>';
 			
-			if($request->type = 'getProbabilityOfDelay'){
-				
+			if($request->type == 'getProbabilityOfDelay'){
+				$delayPercentage = round(($delays/$total) * 100, 2);
+				$table = $table . '<h4>' . $_POST['AIRLINE_NAME'] . ' probability of delays departing from the ' . $_POST['AIRLINE_REGION'] . ': <span class="label label-default">' . $delayPercentage . '%</span></h4>';
 			}
 		}
 	}
-	echo <<<_END
-	<script>
-	$(document).ready(function(){
-		$("$selector").html('$table');
-		console.log('hello');
-	});
-	</script>
-_END;
+	echo $table;
 	
 ?>

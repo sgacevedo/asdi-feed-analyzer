@@ -9,6 +9,9 @@ body {
 .contents{
     margin: 40px 150px;
 }
+.contents .results h4{
+    float: right;
+}
 #loginForm,
 #account,
 #query,

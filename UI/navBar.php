@@ -46,7 +46,6 @@
 _END;
 		
         $user;
-
         $userEmail = $_SESSION['user']->email;
 
         if($_SESSION['user']->type == 'SUPER_USER'){
@@ -60,6 +59,20 @@ _END;
         else if($_SESSION['user']->type == 'GENERAL_USER'){
             $user = new GeneralUser($userEmail);
             $user->type = 'GENERAL_USER';
+        }
+        
+        $user->id = $_SESSION['user']->id;
+        $user->firstName = $_SESSION['user']->firstName;
+        $user->lastName = $_SESSION['user']->lastName;
+        
+        $homepage = "/seProj/asdi-feed-analyzer/home.php";
+        $currentpage = $_SERVER['PHP_SELF'];
+        if($homepage==$currentpage) {
+        	echo <<<_END
+				<div class="contents">
+        			<h1>Welcome, $user->firstName $user->lastName</h1>
+				</div>
+_END;
         }
     }
 ?>

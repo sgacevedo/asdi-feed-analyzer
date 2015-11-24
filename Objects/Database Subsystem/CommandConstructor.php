@@ -18,7 +18,9 @@ class CommandConstructor
             $command = $UserCC->transformCommand($request);
         }
         
-        else if($request->dbTable == 'se_Flights'){
+        else if($request->dbTable == 'se_Flights' || 
+				$request->dbTable == 'se_Airlines' ||
+				$request->dbTable == 'se_Airports'){
         	
         	//create ASDICommandConstructor instance
         	$asdiCC = new ASDICommandConstructor();

@@ -7,6 +7,7 @@ class User
 	public $password;
 	public $hashedPassword;
     public $type;
+    public $id;
 	
 	//constuctor
 	public function __construct($email){

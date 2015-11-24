@@ -70,11 +70,16 @@ if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AU
 		{
 			//sucessful login
 			if($row[6] == 'ACTIVE'){
-				echo'success';
+				$user->id = $row[0];
+				$user->firstName = $row[1];
+				$user->lastName = $row[2];
                 $user->type = $row[5];
                 
 				$_SESSION['user'] = $user;
 				echo <<<_END
+				<div class="contents">
+					<h1>Welcome, $user->firstName $user->lastName </h1>
+				</div>
 				<script type="text/javascript">
 					$(document).ready(function(){
               			$('#account').show();

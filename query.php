@@ -28,8 +28,8 @@
 						    <i class="fa fa-calendar"></i>&nbsp;
 						    <span></span> <b class="caret"></b>
 						</div>
-						<input type="text" name="AIRLINE_STARTDATE" class="startDate"/>
-						<input type="text" name="AIRLINE_ENDDATE" class="endDate" />
+						<input type="hidden" name="AIRLINE_STARTDATE" class="startDate"/>
+						<input type="hidden" name="AIRLINE_ENDDATE" class="endDate" />
 						<div id="delaysByAirlines" class="checkbox">
 							<label><input type="checkbox" name="AIRLINE_DELAYS" value="" checked>List in order the airlines with the most delays</label>
 						</div>
@@ -45,10 +45,20 @@
 						<div id="airlineSelect" class="disabled" style="margin-top: 10px">
 							<label for="airline">Airline: </label>
 						    <select name="AIRLINE_NAME" class="form-control" id="airline" style="width: 400px" disabled>
-						    	<option>American Airlines</option>
-						        <option>Delta Airlines</option>
-						        <option>Southwest Airlines</option>
-						        <option>United Airlines</option>
+						        <?php 
+						        	if($user->type == 'GENERAL_USER'){
+										$airlines = $user->getNonRestrictedAirlines();
+										
+										for($i = 0; $i < count($airlines); $i++){
+											echo '<option>' .$airlines[$i] . '</option>';
+										}
+									}
+									else{ ?>
+										<option>American Airlines</option>
+						        		<option>Delta Airlines</option>
+						        		<option>Southwest Airlines</option>
+						       			<option>United Airlines</option>
+								<?php } ?>
 					        </select>
 						</div>
 						<div style="margin-top: 20px">
@@ -59,7 +69,36 @@
     			</div>
    				<div id="airports" class="tab-pane fade">
       				<h3>Airports</h3>
-      				<p>Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      				<form method="post" action="query.php?tab=airports">
+	      				<div id="airportDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+						    <i class="fa fa-calendar"></i>&nbsp;
+						    <span></span> <b class="caret"></b>
+						</div>
+						<input type="hidden" name="AIRPORT_STARTDATE" class="startDate"/>
+						<input type="hidden" name="AIRPORT_ENDDATE" class="endDate" />
+						<div id="airportSelect" class="" style="margin-top: 10px">
+							<label for="airport">Airport: </label>
+						    <div class="radio">
+								<label><input type="radio" name="AIRPORT_RADIO" value="all_airports" checked>All Airports</label>
+							</div>
+						    <div class="radio">
+						    	<label><input type="radio" name="AIRPORT_RADIO" value="one_airport">Choose Airport: <select name="AIRPORT_NAME" class="form-control" id="airport" style="width: 400px" disabled><?php getValidAirports(); ?></select></label>
+						    </div>
+						</div>
+						<div id="delaySelect">
+							<label for="airport">Delays: </label>
+							<div class="radio">
+								<label><input type="radio" name="AIRPORT_DELAY_RADIO" value="delayed_departures" checked>Show delayed departures</label>
+							</div>
+							<div class="radio">
+							  	<label><input type="radio" name="AIRPORT_DELAY_RADIO" value="delayed_arrivals" disabled>Show delayed arrivals</label>
+							</div>
+						</div>
+						<div style="margin-top: 20px">
+							<button type="submit" class="btn btn-success">Run</button>
+						</div>
+      				</form>
+      				<div class="results"><?php require_once 'Queries/AirportQuery.php';?></div>
     			</div>
     			<div id="airspace" class="tab-pane fade">
       				<h3>Airspace</h3>
@@ -79,7 +118,40 @@
     			</div>
   			</div>
         <?php
-            
+            function getValidAirports(){
+				$dbMan = new DatabaseManager();
+				
+				if(!$dbMan->establishConnection()){
+					//database connection error
+					return;
+				}
+				
+				$request = new Request ('getAirports', 'se_Airports');
+				$request->transformCommand();	
+
+				$airports = $dbMan->executeQuery($request);
+				
+				//server error
+				if($airports == null){
+					//request was unsuccessful
+				}
+				
+				else if($airports -> num_rows){
+
+					/* Get number of rows returned */
+					$rows = $airports->num_rows;
+						
+					/* For each row - push the airline name
+					 * onto the $airlines array */
+					for ($i = 0 ; $i < $rows ; ++$i){
+						$airports->data_seek($i);
+						$row = $airports->fetch_array(MYSQLI_NUM);
+							
+						echo "<option>" . $row[0] . "</option>";
+						
+					}
+				}
+			}
             ?>
 
         </div>

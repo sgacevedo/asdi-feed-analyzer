@@ -23,6 +23,9 @@ body {
 #alertRequestFail{
     display: none;
 }
+.noResults{
+	text-align: center;
+}
 i{
     padding-right: 10px;
 }

@@ -24,12 +24,12 @@
     			<div id="airlines" class="tab-pane fade in active">
       				<h3>Airlines</h3>
       				<form method="post" action="query.php">
-	      				<div id="airlineDateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+	      				<div id="airlineDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
 						    <i class="fa fa-calendar"></i>&nbsp;
 						    <span></span> <b class="caret"></b>
 						</div>
-						<input type="hidden" name="AIRLINE_STARTDATE" />
-						<input type="hidden" name="AIRLINE_ENDDATE" />
+						<input type="text" name="AIRLINE_STARTDATE" class="startDate"/>
+						<input type="text" name="AIRLINE_ENDDATE" class="endDate" />
 						<div id="delaysByAirlines" class="checkbox">
 							<label><input type="checkbox" name="AIRLINE_DELAYS" value="" checked>List in order the airlines with the most delays</label>
 						</div>

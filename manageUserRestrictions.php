@@ -16,25 +16,29 @@ require_once 'UI/navBar.php';
 
 <div class="contents">
 <?php
-$dbMan = new DatabaseManager ();
-if (! $dbMan->establishConnection ()) {
-	// database connection error
-	return;
-}
 if ($_SESSION ['user']->type == 'ADMINISTRATOR') {
+	
+	$dbMan = new DatabaseManager();
+	
+	if (! $dbMan->establishConnection ()) {
+		// database connection error
+		return;
+	}
 
-// Airline_Restrictions
-// $request = new Request ( 'SELECT U.user_id, U.firstName, U.lastName, AR.restriction_id, AR.airline_name', 'se_Users AS U JOIN se_Airline_Restrictions as AR' );
-// $request->addParameter ( 'status', 'ACTIVE' );
-// $request->addParameter ( 'U.user_id', 'AR.user_id' );
-// $request->transformCommand ();
-$query = "SELECT U.user_id, U.firstName, U.lastName, AR.restriction_id, AR.airline_name FROM se_Users AS U JOIN se_Airline_Restrictions as AR WHERE status='ACTIVE' and  U.user_id";
-// $results = $dbMan->executeQuery ( $request );
-$results = mysql_query ($query, $dbMan );
-
-$rows = $results->num_rows;
-}
-?>	
+	$request = new Request('selectActiveUsers', 'se_Users');
+	$request->addParameter('status', 'ACTIVE');
+	$request->transformCommand();
+	
+	$results = $dbMan->executeQuery($request);
+	
+	//server error
+	if($results == null){
+		//request was unsuccessful
+		return;
+	}
+	
+		$rows = $results->num_rows;
+	?>	
 		<h1>Request Restrictions</h1>
 		<table class="table table-hover">
 			<thead>
@@ -48,6 +52,10 @@ $rows = $results->num_rows;
 			</thead>
 			<tbody>
 			<?php
+			if($rows == 0){?>
+				<tr><td class="noResults" colspan="5">No results</td></tr>
+			<?php
+			}
 			for($i = 0; $i < $rows; ++ $i) {
 				$results->data_seek ( $i );
 				$row = $results->fetch_array ( MYSQLI_NUM );
@@ -70,12 +78,11 @@ _END
 ?>
 					</td>
 				</tr>
-				<?php }?>
+				<?php }}?>
 			</tbody>
 		</table>
 		<form action="addRestriction.php" method="POST">
-			<button type="submit" class="btn btn-success">Request a new
-				Restriction</button>
+			<button type="submit" class="btn btn-success">Request a new Restriction</button>
 		</form>
 	</div>
 </body>

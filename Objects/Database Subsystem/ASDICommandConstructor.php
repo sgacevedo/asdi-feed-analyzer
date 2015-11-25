@@ -26,6 +26,12 @@
             else if($request->type == 'getDelayedArrivalsByAirport'){
             	$command = $this->getDelayedArrivalsByAirport($request);
             }
+            else if($request->type == 'getDelayedFlights'){
+            	$command = $this->getDelayedFlights($request);
+            }
+            else if($request->type == 'getOnTimeFlights'){
+            	$command = $this->getOnTimeFlights($request);
+            }
             
             return $command;
         }
@@ -119,5 +125,49 @@
 						."AND f.arrival_airport = '" . $request->fields['airport'] . "';";
         	return $command;	
         }
+        
+        public function getDelayedFlights($request){
+        	$command = "SELECT f.flight_number, "
+        				."f.departure_date, "
+        				."f.departure_time as filed_depart, "
+        				."d.departure_time as flown_depart, "
+        				."f.arrival_date, "
+        				."f.arrival_time as filed_arrival, "
+        				."a.arrival_time as flown_arrival "
+					."FROM se_Flights f "
+					."INNER JOIN se_Departure d "
+						."ON f.flight_number = d.flight_number " 
+					."INNER JOIN se_Arrival a "
+						."ON f.flight_number = a.flight_number "
+					."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+						."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+						."AND (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "
+						."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+						."AND f.departure_date <= '" . $request->fields['endDate'] . "';";
+        	return $command;
+        }
+        
+        public function getOnTimeFlights($request){
+        	$command = "SELECT f.flight_number, "
+        				."f.departure_date, "
+        				."f.departure_time as filed_depart, "
+        				."d.departure_time as flown_depart, "
+        				."f.arrival_date, "
+        				."f.arrival_time as filed_arrival, "
+        				."a.arrival_time as flown_arrival "
+					."FROM se_Flights f "
+					."INNER JOIN se_Departure d "
+						."ON f.flight_number = d.flight_number " 
+					."INNER JOIN se_Arrival a "
+						."ON f.flight_number = a.flight_number "
+					."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+						."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+						."AND d.departure_time = f.departure_time "
+						."AND a.arrival_time = f.arrival_time "
+						."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+						."AND f.departure_date <= '" . $request->fields['endDate'] . "';";
+        	return $command;
+        }
+        
     }
 ?>

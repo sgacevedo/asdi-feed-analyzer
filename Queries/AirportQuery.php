@@ -16,7 +16,7 @@
 		/* Get the value of the selected airport radio button */
 		$airportRadioButton = $_POST['AIRPORT_RADIO'];
 		
-		/* Ff the user has selected all airports */
+		/* If the user has selected all airports */
 		if($airportRadioButton == "all_airports"){
 			/* Create new request to get airports by delays */
 			$request = new Request('getAirportsByDelays', 'se_Flights');

@@ -106,7 +106,41 @@
     			</div>
     			<div id="flights" class="tab-pane fade">
       				<h3>Flights</h3>
-      				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      				<form method="post" action="query.php?tab=flights">
+	      				<div id="flightDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+						    <i class="fa fa-calendar"></i>&nbsp;
+						    <span></span> <b class="caret"></b>
+						</div>
+						<input type="hidden" name="FLIGHT_STARTDATE" class="startDate"/>
+						<input type="hidden" name="FLIGHT_ENDDATE" class="endDate" />
+						<div id="departAirportSelect" class="" style="margin-top: 10px">
+							<label for="departAirport">Departure Airport: </label>
+						    <select name="DEPARTING_AIRPORT" class="form-control" id="departAirport" style="width: 400px" >
+						  		<?php getValidAirports(); ?>
+					        </select>
+						</div>
+						<div id="arrivalAirportSelect" class="" style="margin-top: 10px">
+							<label for="arrvialAirport">Arrival Airport: </label>
+						    <select name="ARRIVAL_AIRPORT" class="form-control" id="arrvialAirport" style="width: 400px" >
+						  		<?php getValidAirports(); ?>
+					        </select>
+						</div>
+						<div id="flightsSelect">
+							<div class="radio">
+								<label><input type="radio" name="FLIGHTS_SELECT" value="show_delays" checked>Show delayed Flights</label>
+							</div>
+							<div class="radio">
+							  	<label><input type="radio" name="FLIGHTS_SELECT" value="show_no_delays" >Show on-time Flights</label>
+							</div>
+							<div class="radio">
+							  	<label><input type="radio" name="FLIGHTS_SELECT" value="show_amendments" >Show Cancellations and Amendements</label>
+							</div>
+						</div>
+						<div style="margin-top: 20px">
+							<button type="submit" class="btn btn-success">Run</button>
+						</div>
+      				</form>
+      				<div class="results"><?php require_once 'Queries/FlightQuery.php';?></div>
     			</div>
     			<div id="messages" class="tab-pane fade">
       				<h3>Messages</h3>

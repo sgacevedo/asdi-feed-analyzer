@@ -26,18 +26,21 @@
 </html>
 
 <?php
-
-$dbMan = new DatabaseManager();
-		
-if(!$dbMan->establishConnection()){
-	//database connection error
-	return;
+if(isset($_SESSION['user']) && !isset($_POST['LOGOUT'])){
+	displayWelcomePanel($user);
 }
 
 
-//if the a session user variable is not set and AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user
+/* If the a session user variable is not set and AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user */
 if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AUTH_PASSWORD']))
 {
+	
+	$dbMan = new DatabaseManager();
+	
+	if(!$dbMan->establishConnection()){
+		//database connection error
+		return;
+	}
 	
 	//create new user instance
 	$user = new User($_POST['AUTH_EMAIL']);
@@ -76,10 +79,9 @@ if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AU
                 $user->type = $row[5];
                 
 				$_SESSION['user'] = $user;
+				
+				displayWelcomePanel($user);
 				echo <<<_END
-				<div class="contents">
-					<h1>Welcome, $user->firstName $user->lastName </h1>
-				</div>
 				<script type="text/javascript">
 					$(document).ready(function(){
               			$('#account').show();
@@ -171,5 +173,46 @@ function destroy_session_and_data()
     $_SESSION = array();
     setcookie(session_name(), '', time() - 2592000, '/');
     session_destroy();
+}
+
+function displayWelcomePanel($user){
+
+	if($user->type = 'SUPER_USER'){
+		//echo 'numberOfAccounts = ' . getNumberOfPendingAccounts() . '<br />';
+	}
+	echo <<<_END
+		<div class="contents">
+			<h1>Welcome, $user->firstName $user->lastName </h1>
+		
+			<div class="table">
+				<div class="table-row">
+					<div class="table-cell">
+		
+					</div>
+				</div>
+			</div>
+		</div>
+_END;
+}
+
+function getNumberOfPendingAccounts(){
+	$dbMan = new DatabaseManager();
+
+	if(!$dbMan->establishConnection()){
+		//database connection error
+		return;
+	}
+	
+	$request = new Request('SELECT *', 'se_Users');
+	$request->addParameter('status', 'PENDING_APPROVAL');
+	$request->transformCommand();
+	
+	$results = $dbMan->executeQuery($request);
+	
+	if($results == null){
+		//request failed
+	}
+	
+	return $rows = $results->num_rows;
 }
 ?>

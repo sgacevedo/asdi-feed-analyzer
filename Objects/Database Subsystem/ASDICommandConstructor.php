@@ -20,6 +20,9 @@
             else if($request->type == 'getAirports'){
             	$command = $this->getValidAirports();
             }
+            else if($request->type == 'getValidRegions'){
+            	$command = $this->getValidRegions($request);
+            }
        	 	else if($request->type == 'getDelayedDeparturesByAirport'){
             	$command = $this->getDelayedDeparturesByAirport($request);
             }
@@ -76,7 +79,7 @@
         	return $command;
         }
         
-        public function getValidAirports(){
+    public function getValidAirports(){
         	$command = "SELECT ap.airport_name "
 					."FROM se_Airports ap "
 					."LEFT JOIN se_Departure as d "
@@ -87,6 +90,17 @@
 						."OR a.arrival_airport = ap.airport_name "
 					."GROUP BY airport_name;";
         	return $command;	
+        }
+        
+        public function getValidRegions($request){
+        	$command = "SELECT a.region "
+        			."FROM se_Airports a "
+        			."LEFT JOIN "
+        				."(SELECT * FROM se_Region_Restrictions WHERE user_id = " . $request->fields['user_id'] . ") as r "
+        				."ON r.region = a.region "
+        			."WHERE r.region IS NULL "
+        			."GROUP BY a.region;";
+        	return $command;
         }
         
         public function getAirportsByDelays($request){

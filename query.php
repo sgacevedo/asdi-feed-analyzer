@@ -36,10 +36,20 @@
 						<div id="airlineRegion" class="disabled">
 							<label for="region">Departure region: </label>
 						    <select name="AIRLINE_REGION" class="form-control" id="region" style="width: 400px" disabled>
-						    	<option value="west">West</option>
-						        <option value="south">South</option>
-						        <option value="midwest">Midwest</option>
-						        <option value="northeast">Northeast</option>
+						    	<?php 
+						        	if($user->type == 'GENERAL_USER'){
+										$regions = $user->getNonRestrictedRegions();
+										
+										for($i = 0; $i < count($regions); $i++){
+											echo '<option>' .$regions[$i] . '</option>';
+										}
+									}
+									else{ ?>
+								    	<option>West</option>
+								        <option>South</option>
+								        <option>Midwest</option>
+								        <option>Northeast</option>
+									<?php } ?>
 					        </select>
 						</div>
 						<div id="airlineSelect" class="disabled" style="margin-top: 10px">

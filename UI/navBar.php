@@ -65,14 +65,5 @@ _END;
         $user->firstName = $_SESSION['user']->firstName;
         $user->lastName = $_SESSION['user']->lastName;
         
-        $homepage = "/seProj/asdi-feed-analyzer/home.php";
-        $currentpage = $_SERVER['PHP_SELF'];
-        if($homepage==$currentpage) {
-        	echo <<<_END
-				<div class="contents">
-        			<h1>Welcome, $user->firstName $user->lastName</h1>
-				</div>
-_END;
-        }
     }
 ?>

@@ -88,14 +88,16 @@
 					$table = $table . '<td>'. $row[$j] .'</td>';
 				}
 				$table = $table . '</tr>';
-				
+	
 				if($request->type == 'getDelayedFlights'){
-					if($row[2] > $row[1]){
-						$delay = subtractTime($row[2], $row[1]);
+					
+					if($row[3] > $row[2]){
+						$delay = subtractTime($row[3], $row[2]);
+						//echo $row[3] . ' - ' . $row[2] . ' = ' . $delay . ' <br />';
 						$delaySum += $delay;
 					}
 					else{
-						$delay = $row[4]-$row[3];
+						$delay = $row[6] - $row[5];
 						$delaySum += $delay;
 					}
 				}

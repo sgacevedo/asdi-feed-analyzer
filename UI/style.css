@@ -13,14 +13,17 @@ body {
     float: right;
 }
 #loginForm,
-#account,
+#userAccounts,
 #query,
+#myAccount,
 #requestAccount,
 #signOut,
 #alertLoginIncorrectCred,
 #alertPending,
 #alertRequestSuccess,
-#alertRequestFail{
+#alertRequestFail,
+#updateSuccess, 
+#unmatchedPasswords{
     display: none;
 }
 .noResults{
@@ -88,4 +91,73 @@ i{
   display: none;
   max-width: 370px !important;
   margin: 4px;
+}
+/* manageAccount.php */
+#viewOnly #currentUserInformation td,
+#editable td,
+#changePassword td{
+  padding: 10px 0;
+}
+#viewOnly #currentUserInformation th, 
+#editable th, 
+#changePassword th{
+  text-align: right;
+  padding-right: 10px;
+}
+#editable,
+#changePassword{
+	display: none;
+}
+
+/* home.php */
+.home h1{
+  text-align: center;
+  padding: 50px 0px 0px 0px;
+}
+.home h4{
+  text-align: center;
+  padding: 0px 0px 50px 0px;
+  color: #777;
+}
+#actionTiles .table-cell{
+  position: relative;
+}
+#actionTiles .table-cell a{
+  text-decoration: none;
+}
+#actionTiles .table-cell .tile{
+  border: 1px solid #e7e7e7;
+  background: #F8F8F8;
+  border-radius: 4px;
+  height: 150px;
+  width: 150px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 15px;
+  display: table;
+  transition: all 0.3s ease 0s;
+}
+#actionTiles .table-cell .tile:hover{
+  background: #efefef;
+  transition: all 0.3s ease 0s;
+}
+#actionTiles .table-cell .tile .top,
+#actionTiles .table-cell .tile .bottom{
+  height: 50%;
+  vertical-align: middle;
+  color: #777;
+}
+#actionTiles .table-cell .tile .bottom{
+  font-family: 'Montserrat', sans-serif;
+  font-size: 9.5pt;
+}
+#actionTiles .table-cell .tile .bottom div:last-child{
+  padding-top: 5px;
+}
+#actionTiles .table-cell .tile .bottom span.badge{
+  background: #D9534F;
+}
+#actionTiles .table-cell .tile .top i{
+  padding: 0;
+  font-size: 20pt;
 }

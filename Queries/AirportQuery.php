@@ -5,7 +5,7 @@
 	if(isset($_POST['AIRPORT_STARTDATE']) && isset($_POST['AIRPORT_ENDDATE'])){
 		
 		$dbMan = new DatabaseManager();
-		$request = '';
+		$request;
 		
 		/* Establish Connection with database */
 		if(!$dbMan->establishConnection()){
@@ -18,6 +18,7 @@
 		
 		/* If the user has selected all airports */
 		if($airportRadioButton == "all_airports"){
+			
 			/* Create new request to get airports by delays */
 			$request = new Request('getAirportsByDelays', 'se_Flights');
 			
@@ -91,6 +92,7 @@
 		/* Transform the request into a command */
 		$request->transformCommand();
 		
+		/* database manager executes query */
 		$results = $dbMan->executeQuery($request);
 		
 		if($results == null){

@@ -41,7 +41,7 @@
 	  	else if(isset ($_POST['RegRestriction'])){
 		  //insert into Region Restrictions
 		  $command2="INSERT INTO se_Region_Restrictions (restriction_id, user_id, region, status) "
-		  		." VALUES ('AAAA,'BBBB','CCCC', 'PENDING')";
+		  		." VALUES ('AAAA','BBBB','CCCC', 'PENDING');";
 		  $command2 = str_replace('AAAA',$_POST['restriction_id'],$command);
 		  $command2 = str_replace('BBBB',$_POST['user_id'],$command);
 		  $command2 = str_replace('CCCC',$_POST['region'],$command);

@@ -17,10 +17,9 @@
 	  		// database connection error
 	  		return;
 	  	}
-//	  	$request = new Request ( 'INSERT INTO', $Air );
-// 		Having command constructor trouble
-//	  	$request->transformCommand();
 
+	  	if(isset($_POST['AirRestriction'])){ 	
+	  		
 	  	  //insert into Airline Restrictions
 	  	  $command="INSERT INTO se_Airline_Restrictions (restriction_id, user_id, airline_name, status) "
 			." VALUES ('IIII,'UUUU','NNNN', 'PENDING')";
@@ -38,12 +37,14 @@
 		  }else{
 			echo "FAILED, error: " . mysql_error();
 		  }
-		  //insert into Airspace Restrictions
-		  $command2="INSERT INTO se_Airspace Restrictions (restriction_id, user_id, airline_name, status) "
+	  	}
+	  	else if(isset ($_POST['RegRestriction'])){
+		  //insert into Region Restrictions
+		  $command2="INSERT INTO se_Region_Restrictions (restriction_id, user_id, region, status) "
 		  		." VALUES ('AAAA,'BBBB','CCCC', 'PENDING')";
 		  $command2 = str_replace('AAAA',$_POST['restriction_id'],$command);
 		  $command2 = str_replace('BBBB',$_POST['user_id'],$command);
-		  $command2 = str_replace('CCCC',$_POST['airline_name'],$command);
+		  $command2 = str_replace('CCCC',$_POST['region'],$command);
 		  
 		  echo "COMMAND:<br>" . $command2 . "<br><br>";
 		  $result2 = mysql_query($command2, $dbMan);
@@ -53,10 +54,9 @@
 		  }else{
 		  	echo "FAILED, error: " . mysql_error();
 		  }
+	  	}
 		  mysql_close($dbMan);
 		}
-
-
 	?>
 	  <form action='addRestriction.php' method='POST'>
 	  	<br>Restriction ID:
@@ -65,7 +65,7 @@
 	    <br><input type='text' name='user_id' placeholder='1234' />
 		<br>Airline Name:
 		<br><input type='text' name='airline_name' placeholder='Airline Name'/>
-	  	<br><br><input type='submit' value= 'Request Airline Restriction'/>
+	  	<br><br><input type='submit' name= "AirRestriction" value= 'Request Airline Restriction'/>
 	  </form>
 	  
 	   <form action='addRestriction.php' method='POST'>
@@ -73,9 +73,9 @@
 	  	<br><input type='text' name='restriction_id' placeholder= '1234'/>
 	    <br>User ID:
 	    <br><input type='text' name='user_id' placeholder='1234' />
-		<br>Airspace ID:
-		<br><input type='text' name='airspace_id' placeholder='1234'/>
-	  	<br><br><input type='submit' value ='Request Airspace Restriction'/>
+		<br>Region:
+		<br><input type='text' name='airspace_id' placeholder='North'/>
+	  	<br><br><input type='submit' name='RegRestriction' value ='Request Region Restriction'/>
 	  </form>
 	
 	</div>

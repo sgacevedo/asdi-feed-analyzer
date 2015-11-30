@@ -23,6 +23,9 @@
             else if($request->type == 'getValidRegions'){
             	$command = $this->getValidRegions($request);
             }
+            else if($request->type == 'getAirportsByDelays'){
+            	$command = $this->getAirportsByDelays($request);
+            }
        	 	else if($request->type == 'getDelayedDeparturesByAirport'){
             	$command = $this->getDelayedDeparturesByAirport($request);
             }
@@ -39,6 +42,29 @@
             return $command;
         }
         
+        public function getAirlineRestrictions(){
+        	$command = '';
+        	
+        	/* If the current user is a general user, only show the airlines they are not restricted to */
+        	if($GLOBALS['user']->type == 'GENERAL_USER'){
+        		$airlines = $GLOBALS['user']->getNonRestrictedAirlines();
+        	
+        		$command = $command . "AND (";
+        	
+        		for($i = 0; $i < count($airlines); $i++){
+        			$command = $command . "f.airline_name = '" . $airlines[$i] . "'";
+        			 
+        			if($i+1 != count($airlines)){
+        				$command = $command . " OR ";
+        			}
+        		}
+        	
+        		$command = $command . ") ";
+        	}
+        	
+        	return $command;
+        }
+        
         public function getDelaysByAirlines($request){
         	$command = "SELECT f.airline_name, COUNT(f.airline_name) "
         			."FROM se_Flights f "
@@ -49,7 +75,8 @@
 					."WHERE (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "
 						."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
 						."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
-					."GROUP BY f.airline_name " 
+						.$this->getAirlineRestrictions()
+        			. "GROUP BY f.airline_name " 
 					."ORDER BY COUNT(f.airline_name) DESC;";
         	
         	return $command;

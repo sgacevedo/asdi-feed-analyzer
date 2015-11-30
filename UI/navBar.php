@@ -61,6 +61,8 @@
         
         showNavBarItems($user);
         
+        $GLOBALS['user'] = $user;
+        
     }
     
     function showNavBarItems($user){

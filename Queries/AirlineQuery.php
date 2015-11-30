@@ -84,9 +84,13 @@
 				}
 	
 			}
+			if($rows == 0){
+				$table = $table . '<tr><td>No items</td></tr>';
+			}
+			
 			$table = $table . '</tbody></table>';
 			
-			if($request->type == 'getProbabilityOfDelay'){
+			if($request->type == 'getProbabilityOfDelay' && $rows > 0){
 				$delayPercentage = round(($delays/$total) * 100, 2);
 				$table = $table . '<h4>' . $_POST['AIRLINE_NAME'] . ' probability of delays departing from the ' . $_POST['AIRLINE_REGION'] . ': <span class="label label-default">' . $delayPercentage . '%</span></h4>';
 			}

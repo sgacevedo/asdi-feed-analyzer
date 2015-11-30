@@ -22,7 +22,7 @@
 	  		
 	  	  //insert into Airline Restrictions
 	  	  $command="INSERT INTO se_Airline_Restrictions (restriction_id, user_id, airline_name, status) "
-			." VALUES ('IIII,'UUUU','NNNN', 'PENDING')";
+			." VALUES ('IIII,'UUUU','NNNN', 'PENDING_APPROVAL')";
 		  $command = str_replace('IIII',$_POST['restriction_id'],$command);
 		  $command = str_replace('UUUU',$_POST['user_id'],$command);
 		  $command = str_replace('NNNN',$_POST['airline_name'],$command);
@@ -41,7 +41,7 @@
 	  	else if(isset ($_POST['RegRestriction'])){
 		  //insert into Region Restrictions
 		  $command2="INSERT INTO se_Region_Restrictions (restriction_id, user_id, region, status) "
-		  		." VALUES ('AAAA','BBBB','CCCC', 'PENDING');";
+		  		." VALUES ('AAAA','BBBB','CCCC', 'PENDING_APPROVAL');";
 		  $command2 = str_replace('AAAA',$_POST['restriction_id'],$command);
 		  $command2 = str_replace('BBBB',$_POST['user_id'],$command);
 		  $command2 = str_replace('CCCC',$_POST['region'],$command);

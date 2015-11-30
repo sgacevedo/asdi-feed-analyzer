@@ -19,7 +19,7 @@
 	  	}
 //	  	$request = new Request ( 'INSERT INTO', $Air );
 // 		Having command constructor trouble
-//	  	$request->transformCommand ();
+//	  	$request->transformCommand();
 
 	  	  //insert into Airline Restrictions
 	  	  $command="INSERT INTO se_Airline_Restrictions (restriction_id, user_id, airline_name, status) "

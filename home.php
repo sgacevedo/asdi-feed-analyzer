@@ -1,5 +1,6 @@
 <html>
 <head>
+	<link href='https://fonts.googleapis.com/css?family=Montserrat' rel='stylesheet' type='text/css'>
     <?php
         require_once 'UI/styleIncludes.php'; ?>
 	<title>Login</title>
@@ -26,18 +27,21 @@
 </html>
 
 <?php
-
-$dbMan = new DatabaseManager();
-		
-if(!$dbMan->establishConnection()){
-	//database connection error
-	return;
+if(isset($_SESSION['user']) && !isset($_POST['LOGOUT'])){
+	displayWelcomePanel($user);
 }
 
 
-//if the a session user variable is not set and AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user
+/* If the a session user variable is not set and AUTH_USERNAME and AUTH_PASSWORD have been posted sign in the user */
 if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AUTH_PASSWORD']))
 {
+	
+	$dbMan = new DatabaseManager();
+	
+	if(!$dbMan->establishConnection()){
+		//database connection error
+		return;
+	}
 	
 	//create new user instance
 	$user = new User($_POST['AUTH_EMAIL']);
@@ -70,19 +74,17 @@ if (!isset($_SESSION['user']) && isset($_POST['AUTH_EMAIL']) && isset($_POST['AU
 		{
 			//sucessful login
 			if($row[6] == 'ACTIVE'){
-				echo'success';
+				$user->id = $row[0];
+				$user->firstName = $row[1];
+				$user->lastName = $row[2];
+				$user->email = $row[3];
                 $user->type = $row[5];
                 
 				$_SESSION['user'] = $user;
-				echo <<<_END
-				<script type="text/javascript">
-					$(document).ready(function(){
-              			$('#account').show();
-              			$('#query').show();
-						$('#signOut').show();
-					});
-				</script>
-_END;
+				
+				displayWelcomePanel($user);
+				showNavBarItems($user);
+				
 			}
 			else{
 				echo <<<_END
@@ -132,7 +134,8 @@ else if(isset($_POST['LOGOUT'])){
         $('#loginForm').show();
         $('#requestAccount').show();
         $('#signOut').hide();
-        $('#account').hide();
+        $('#userAccounts').hide();
+		$('#myAccount').hide();
         $('#query').hide();
     });
     </script>
@@ -166,5 +169,146 @@ function destroy_session_and_data()
     $_SESSION = array();
     setcookie(session_name(), '', time() - 2592000, '/');
     session_destroy();
+}
+
+function displayWelcomePanel($user){
+	if($user->type == 'SUPER_USER'){ $type = 'Super User'; $sidePadding = '150px';}
+	else if($user->type == 'ADMINISTRATOR'){ $type = 'Administrator'; $sidePadding = '250px';}
+	else{ $type = 'General User'; $sidePadding = '300px';}
+	
+	$width = 50;
+	
+echo <<<_END
+			<div class="contents home">
+				<h1>Welcome, $user->firstName $user->lastName </h1>
+				<h4>$type</h4>
+				<div class="table" id="actionTiles" style="padding: 0 $sidePadding">
+					<div class="table-row">
+_END;
+		
+	if($user->type == 'SUPER_USER'){
+		$width = 25;
+		$pendingAccounts = getNumberOfPendingAccounts();
+		echo <<<_END
+						<div class="table-cell" style="width: $width%">
+							<a href="pendingAccounts.php">
+								<div class="tile">
+									<div class="table-row">
+			    						<div class="top table-cell">
+			    							<i class="fa fa-tasks"></i>
+			    						</div>
+		    						</div>
+		    						<div class="table-row">
+			    						<div class="bottom table-cell">
+			    							<div>Pending Accounts</div>
+_END;
+		if($pendingAccounts > 0){
+			echo '<div><span class="badge">' . $pendingAccounts . ' </span></div>';
+		}
+		echo <<<_END
+			    						</div>
+									</div>
+		    					</div>
+	    					</a>
+						</div>
+						<div class="table-cell" style="width: $width%">
+    						<a href="manageUserRestrictions.php">
+								<div class="tile">
+									<div class="table-row">
+			    						<div class="top table-cell">
+			    							<i class="fa fa-warning"></i>
+			    						</div>
+		    						</div>
+		    						<div class="table-row">
+			    						<div class="bottom table-cell">
+			    							<div>Pending Restrictions</div>
+			    						</div>
+									</div>
+		    					</div>
+    						</a>
+						</div>
+_END;
+	}
+	else if($user->type == 'ADMINISTRATOR'){
+		$width = 33;
+		
+		echo <<<_END
+						<div class="table-cell" style="width: $width%">
+							<a href="manageUserRestrictions.php">
+								<div class="tile">
+									<div class="table-row">
+			    						<div class="top table-cell">
+			    							<i class="fa fa-ban"></i>
+			    						</div>
+		    						</div>
+		    						<div class="table-row">
+			    						<div class="bottom table-cell">
+			    							<div>Manage Restrictions</div>
+			    						</div>
+									</div>
+		    					</div>
+							</a>
+						</div>
+_END;
+	}
+	
+	echo <<<_END
+						<div class="table-cell" style="width: $width%">
+							<a href="manageAccount.php">
+								<div class="tile">
+									<div class="table-row">
+			    						<div class="top table-cell">
+			    							<i class="fa fa-user"></i>
+			    						</div>
+		    						</div>
+		    						<div class="table-row">
+			    						<div class="bottom table-cell">
+			    							<div>Manage Account</div>
+			    						</div>
+									</div>
+		    					</div>
+	    					</a>
+						</div>
+						<div class="table-cell" style="width: $width%">
+			    			<a href="query.php">
+								<div class="tile">
+									<div class="table-row">
+			    						<div class="top table-cell">
+			    							<i class="fa fa-search"></i>
+			    						</div>
+		    						</div>
+		    						<div class="table-row">
+			    						<div class="bottom table-cell">
+			    							<div>Query</div>
+			    						</div>
+									</div>
+		    					</div>
+			    			</a>
+						</div>
+					</div>
+				</div>
+			</div>
+_END;
+}
+
+function getNumberOfPendingAccounts(){
+	$dbMan = new DatabaseManager();
+
+	if(!$dbMan->establishConnection()){
+		//database connection error
+		return;
+	}
+	
+	$request = new Request('SELECT *', 'se_Users');
+	$request->addParameter('status', 'PENDING_APPROVAL');
+	$request->transformCommand();
+	
+	$results = $dbMan->executeQuery($request);
+	
+	if($results == null){
+		//request failed
+	}
+	
+	return $rows = $results->num_rows;
 }
 ?>

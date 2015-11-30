@@ -9,7 +9,7 @@
             $command = '';
             $numParameters = count($request->fields);
             
-            //UPDATE sql command
+            //UPDATE status sql command
             if($request->type == 'UPDATE status'){
                 
                 $command = 'UPDATE ' . $request->dbTable . ' SET status = ' . $request->fields['status'] . ' WHERE user_id = ' . $request->fields['user_id'];
@@ -41,7 +41,37 @@
                 }
             }
             
-            //INSERT sql command
+            //UPDATE sql command
+            else if($request->type == 'UPDATE'){
+            	//counter
+            	$i = 1;
+            
+            	//comamand - sql string
+            	$command = 'UPDATE ' . $request->dbTable . ' SET ';
+            
+            
+            	//for each item in the array
+            	foreach($request->fields as $field => $value) {
+            		
+            		if($field != 'user_id'){
+	            		$command = $command . $field . " = '" . $value . "'";
+	            
+	            		//if not last element in array - add comma
+	            		if($i != $numParameters){
+	            			$command = $command . ', ';
+	            		}
+            		}
+            		
+            		//if last element in array - close paraenthesis
+            		if($i == $numParameters) {
+            			$command = $command . ' WHERE user_id = ' . $request->fields['user_id'] .';';
+            		}
+            		$i++;
+            	}
+            	$command = $command;
+            }
+            
+        	//INSERT sql command
             else if($request->type == 'INSERT'){
                 //counter
                 $i = 1;
@@ -96,6 +126,14 @@
                         }
                     }
                 }
+            }
+
+            else if($request->type == 'selectActiveUsers'){
+            	 $command = "SELECT U.user_id, U.firstName, U.lastName, AR.restriction_id, AR.airline_name "
+            	 			."FROM se_Users AS U "
+            	 			."INNER JOIN se_Airline_Restrictions as AR "
+            	 				."ON AR.user_id = U.user_id "
+            	 			."WHERE U.status = '" . $request->fields['status'] . "';";
             }
             
             //return command string;

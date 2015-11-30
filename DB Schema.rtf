@@ -47,27 +47,23 @@ mysql> DESCRIBE se_Airline_Restrictions;\
 4 rows in set (0.00 sec)\
 \
 
-\f0\b\fs36 se_Airspace_Restriction
-\f1\b0\fs22  - stores the user restrictions related to airspace.\
+\f0\b\fs36 se_Region_Restriction
+\f1\b0\fs22  - stores the user restrictions related to regions.\
 \
 	
 \f0\b FOREIGN KEYS:\
 
-\f1\b0 	- user_id REFERENCES user_id in the se_Users table.
-\f0\b \
-	
-\f1\b0 - airspace_id REFERENCES airspace_id in the se_Airspace table.\
+\f1\b0 	- user_id REFERENCES user_id in the se_Users table.\
 \
-mysql> DESCRIBE se_Airspace_Restrictions;\
-+----------------+-----------------------------------+------+-----+---------+----------------+\
-| Field          | Type                              | Null | Key | Default | Extra          |\
-+----------------+-----------------------------------+------+-----+---------+----------------+\
-| restriction_id | int(11)                           | NO   | PRI | NULL    | auto_increment |\
-| user_id        | int(11)                           | NO   | MUL | NULL    |                |\
-| airspace_id    | int(11)                           | NO   | MUL | NULL    |                |\
-| status         | enum('ACTIVE','PENDING_APPROVAL') | NO   |     | NULL    |                |\
-+----------------+-----------------------------------+------+-----+---------+----------------+\
-4 rows in set (0.00 sec)\
+mysql> DESCRIBE se_Region_Restrictions;\
++----------------+--------------------------------------------+------+-----+---------+----------------+\
+| Field          | Type                                       | Null | Key | Default | Extra          |\
++----------------+--------------------------------------------+------+-----+---------+----------------+\
+| restriction_id | int(11)                                    | NO   | PRI | NULL    | auto_increment |\
+| user_id        | int(11)                                    | NO   | MUL | NULL    |                |\
+| region         | enum('WEST','MIDWEST','SOUTH','NORTHEAST') | NO   |     | NULL    |                |\
++----------------+--------------------------------------------+------+-----+---------+----------------+\
+3 rows in set (0.00 sec)\
 \
 
 \f0\b\fs36 se_Airlines

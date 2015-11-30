@@ -11,7 +11,7 @@
 	<form id="requestForm" class="form-requestAccount" action="requestAccount.php" method="post">
 		<h2 class="form-signin-heading">Request Account</h2>
 		<div id="alertRequestSuccess" class="alert alert-success">
-		  <strong><i class="fa fa-warning"></i>Successful</strong> Your request was successfuly submitted.
+		  <strong><i class="fa fa-check"></i>Successful</strong> Your request was successfuly submitted.
 		</div>
         <div id="alertRequestFail" class="alert alert-fail">
             <strong><i class="fa fa-warning"></i>Unsuccessful</strong> Your request was not successfully submitted.

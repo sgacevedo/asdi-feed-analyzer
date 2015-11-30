@@ -16,6 +16,7 @@ require_once 'UI/navBar.php';
 
 <div class="contents">
 <?php
+<<<<<<< HEAD
 $dbMan = new DatabaseManager ();
 if (! $dbMan->establishConnection ()) {
 	// database connection error
@@ -65,6 +66,31 @@ if(isset($_POST['delete'])){
 $rows = $results->num_rows;
 
 ?>	
+=======
+if ($_SESSION ['user']->type == 'ADMINISTRATOR') {
+	
+	$dbMan = new DatabaseManager();
+	
+	if (! $dbMan->establishConnection ()) {
+		// database connection error
+		return;
+	}
+
+	$request = new Request('selectActiveUsers', 'se_Users');
+	$request->addParameter('status', 'ACTIVE');
+	$request->transformCommand();
+	
+	$results = $dbMan->executeQuery($request);
+	
+	//server error
+	if($results == null){
+		//request was unsuccessful
+		return;
+	}
+	
+		$rows = $results->num_rows;
+	?>	
+>>>>>>> f297e4b9d2c93b962308f953a7030c8fd9284687
 		<h1>Request Restrictions</h1>
 		<table class="table table-hover">
 			<thead>
@@ -77,6 +103,10 @@ $rows = $results->num_rows;
 			</thead>
 			<tbody>
 			<?php
+			if($rows == 0){?>
+				<tr><td class="noResults" colspan="5">No results</td></tr>
+			<?php
+			}
 			for($i = 0; $i < $rows; ++ $i) {
 				$results->data_seek ( $i );
 				$row = $results->fetch_array ( MYSQLI_NUM );
@@ -99,13 +129,16 @@ _END
 ?>
 					</td>
 				</tr>
+<<<<<<< HEAD
 				<?php }//}?>
+=======
+				<?php }}?>
+>>>>>>> f297e4b9d2c93b962308f953a7030c8fd9284687
 			</tbody>
 		</table>
 		<!-- Add a new restriction -->
 		<form action="addRestriction.php" method="POST">
-			<button type="submit" class="btn btn-success">Request a new
-				Restriction</button>
+			<button type="submit" class="btn btn-success">Request a new Restriction</button>
 		</form>
 	</div>
 </body>

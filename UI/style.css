@@ -32,9 +32,14 @@ body {
 i{
     padding-right: 10px;
 }
-#airspace .table-cell{
-  width: 50%;
+#airspace .table-cell:nth-child(1){
+  width: 450px;
   vertical-align: top;
+  padding-bottom: 0px !important;
+}
+#map{
+	height: 400px;
+	margin-top: 20px;
 }
 #signOut form{
     margin-bottom: 0;

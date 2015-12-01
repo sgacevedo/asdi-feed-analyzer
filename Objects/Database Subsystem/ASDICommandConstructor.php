@@ -41,8 +41,14 @@
             else if($request->type == 'getFlightCancelations'){
             	$command = $this->getFlightCancelations($request);
             }
-            else if($request->type == 'getDelaysByRegions'){
+        	else if($request->type == 'getDelaysByRegions'){
             	$command = $this->getDelaysByRegions($request);
+            }
+            else if($request->type == 'getAirspacesByFlights'){
+            	$command = $this->getAirspacesByFlights($request);
+            }
+            else if($request->type == 'getAirspacesByDelays'){
+            	$command = $this->getAirspacesByDelays($request);
             }
             return $command;
         }
@@ -290,6 +296,47 @@
 									.$this->getRegionRestrictions()
 								."GROUP BY (ap.region)) s2) as t "
 						."GROUP BY region;";
+        	return $command;
+        }
+        
+        public function getAirspacesByFlights($request){
+        	$command = "SELECT " 
+        					."t.airspace_id, "
+        					."CONCAT('[',CONCAT(CONCAT(CONCAT(asp.beginning_lat, ', '), asp.beginning_long), '] ')) as Point1, "
+        					."CONCAT('[',CONCAT(CONCAT(CONCAT(asp.ending_lat, ', '), asp.ending_long), '] ')) as Point2, "
+        					."COUNT(t.airspace_id) " 
+						."FROM se_Tracking as t "
+						."INNER JOIN se_Flights as f "
+							."ON f.flight_number = t.flight_number "
+						."INNER JOIN se_Airspace as asp "
+							."ON t.airspace_id = asp.airspace_id "
+						."WHERE f.departure_date >= '" . $request->fields['startDate'] . "' "
+							."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+						."GROUP BY t.airspace_id "
+						."ORDER BY COUNT(t.airspace_id) DESC;";
+        	return $command;
+        }
+        
+        public function getAirspacesByDelays($request){
+        	$command = "SELECT "
+        					."t.airspace_id, "
+        					."CONCAT('[',CONCAT(CONCAT(CONCAT(asp.beginning_lat, ', '), asp.beginning_long), '] ')) as Point1, "
+        					."CONCAT('[',CONCAT(CONCAT(CONCAT(asp.ending_lat, ', '), asp.ending_long), '] ')) as Point2, "
+        					."COUNT(t.airspace_id) " 
+						."FROM se_Tracking as t "
+						."INNER JOIN se_Airspace as asp "
+							."ON t.airspace_id = asp.airspace_id "
+						."INNER JOIN se_Flights f "
+							."ON f.flight_number = t.flight_number "
+						."INNER JOIN se_Departure d "
+							."ON f.flight_number = d.flight_number " 
+						."INNER JOIN se_Arrival a "
+							."ON f.flight_number = a.flight_number "
+						."WHERE (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "
+							."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+							."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+						."GROUP BY t.airspace_id "
+						."ORDER BY COUNT(t.airspace_id) DESC;";
         	return $command;
         }
     }

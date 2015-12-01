@@ -111,11 +111,11 @@
       				<div class="results"><?php require_once 'Queries/AirportQuery.php';?></div>
     			</div>
     			<div id="airspace" class="tab-pane fade">
-      				<h3>Airspace</h3>
-      				<div class="table">
-      					<div class="table-row">
-      						<div class="table-cell">
-      							<form method="post" action="query.php?tab=airspace">
+      				<form method="post" action="query.php?tab=airspace">
+	      				<div class="table">
+	      					<div class="table-row">
+	      						<div class="table-cell">
+	      							<h3>Airspace</h3>
 	      							<div id="airspaceDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
 									    <i class="fa fa-calendar"></i>&nbsp;
 									    <span></span> <b class="caret"></b>
@@ -128,26 +128,22 @@
 											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByFlights" checked>Number of flights</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays" checked>Number of delayed flights</label>
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays">Number of delayed flights</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByMessages" checked>Number of cancelation messages</label>
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByMessages">Number of cancelation messages</label>
 										</div>
 									</div>
 									<div style="margin-top: 20px">
 										<button type="submit" class="btn btn-success">Run</button>
 									</div>
-								</form>
-      						</div>
-      						<div class="table-cell">
-      							<div id="map" style="height: 600px;">
-      								<!--<script type="text/javascript">
-										$(document).ready(function(){ initMap(); });
-      								</script>-->
-      							</div>
-      						</div>
-      					</div>
-      				</div>
+	      						</div>
+	      						<div class="table-cell">
+	      							<div id="map"></div>
+	      						</div>
+	      					</div>
+	      				</div>
+      				</form>
       				<div class="results"><?php require_once 'Queries/AirspaceQuery.php';?></div>
     			</div>
     			<div id="flights" class="tab-pane fade">

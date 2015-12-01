@@ -1,4 +1,5 @@
 var MAP;
+var LINE;
 
 $(document).ready(function(){
 	var url = window.location.toString();
@@ -69,12 +70,28 @@ $(function() {
     		$('#delaySelect input[value="delayed_departures"]').prop('checked', 'true');
     	}
     });
+    
+    $('.plotButton').click(function(){
+    	var row = $(this).parents('tr');
+    	var point1 = row.find('td:nth-child(2)').html();
+    	var point2 = row.find('td:nth-child(3)').html();
+    	
+    	//remove brackets and spaces
+    	point1 = point1.replace("[", "").replace("]", "").replace(" ", "");
+    	point2 = point2.replace("[", "").replace("]", "").replace(" ", "");
+    	
+    	//split coordinate set on comma
+    	point1 = point1.split(",");
+    	point2 = point2.split(",");
+    	
+    	if(LINE != undefined) removeLines();
+    	addLine(point1[0], point1[1], point2[0], point2[1]);
+    });
 });
 
 function initMap(){
-	MAP = L.map('map').setView([35, -97], 4);
+	MAP = L.map('map').setView([38, -97], 4);
 	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
-	    
 	    maxZoom: 18,
 	    id: 'sgacevedo.oa9j8l4j',
 	    accessToken: 'pk.eyJ1Ijoic2dhY2V2ZWRvIiwiYSI6ImNpaG1udmVhczA2eXR1Mmo3YXRweGUyOHMifQ.dWZwd_Obb8axH0Ti4azpUg'
@@ -82,9 +99,13 @@ function initMap(){
 }
 
 function addLine(startLat, startLong, endLat, endLong){
-	var polygon = L.polygon([
-	                 	    [startLat, startLong],
-	                 	    [endLat, endLong]
+	LINE = L.polygon([
+	                 	    [Number(startLat), Number(startLong)],
+	                 	    [Number(endLat), Number(endLong)]
 	                 	],
 	                 	{color: 'red'}).addTo(MAP);
+}
+
+function removeLines(){
+	MAP.removeLayer(LINE);
 }

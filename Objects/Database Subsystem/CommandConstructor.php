@@ -21,7 +21,8 @@ class CommandConstructor
         else if($request->dbTable == 'se_Flights' || 
 				$request->dbTable == 'se_Airlines' ||
 				$request->dbTable == 'se_Airports' ||
-				$request->dbTable == 'se_Region_Restrictions' ){
+				$request->dbTable == 'se_Region_Restrictions' ||
+				$request->dbTable == 'se_Airspaces'){
         	
         	//create ASDICommandConstructor instance
         	$asdiCC = new ASDICommandConstructor();

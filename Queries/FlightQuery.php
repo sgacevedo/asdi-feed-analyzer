@@ -63,7 +63,25 @@
 						.'<tbody>';
 		}
 		else if ($flightRadioButton == 'show_amendments'){
+			$request = new Request('getFlightCancelations', 'se_Flights');
+			$request->addParameter('startDate', $_POST['FLIGHT_STARTDATE']);
+			$request->addParameter('endDate', $_POST['FLIGHT_ENDDATE']);
+			$request->addParameter('depart_airport', $departureAirport);
+			$request->addParameter('arrival_airport', $arrivalAirport);
 			
+			/* Create layout for table */
+			$table = '<table class="table table-hover">'
+						.'<thead>'
+							.'<tr>'
+								.'<th>Flight Number</th>'
+								.'<th>Departure Date</th>'
+								.'<th>Filed Departure Time</th>'
+								.'<th>Arrival Date</th>'
+								.'<th>Filed Arrival Time</th>'
+								.'<th>Amendment Message</th>'
+							.'</tr>'
+						.'</thead>'
+					.'<tbody>';
 		}
 		
 		/* Transform the request into a command */

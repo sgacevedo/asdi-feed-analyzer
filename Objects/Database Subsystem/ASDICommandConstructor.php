@@ -38,11 +38,16 @@
             else if($request->type == 'getOnTimeFlights'){
             	$command = $this->getOnTimeFlights($request);
             }
-            
+            else if($request->type == 'getFlightCancelations'){
+            	$command = $this->getFlightCancelations($request);
+            }
+            else if($request->type == 'getDelaysByRegions'){
+            	$command = $this->getDelaysByRegions($request);
+            }
             return $command;
         }
         
-        public function getAirlineRestrictions(){
+    public function getAirlineRestrictions(){
         	$command = '';
         	
         	/* If the current user is a general user, only show the airlines they are not restricted to */
@@ -62,6 +67,29 @@
         		$command = $command . ") ";
         	}
         	
+        	return $command;
+        }
+        
+        public function getRegionRestrictions(){
+        	$command = '';
+        	 
+        	/* If the current user is a general user, only show the regions they are not restricted to */
+        	if($GLOBALS['user']->type == 'GENERAL_USER'){
+        		$regions = $GLOBALS['user']->getNonRestrictedRegions();
+        		 
+        		$command = $command . "AND (";
+        		 
+        		for($i = 0; $i < count($regions); $i++){
+        			$command = $command . "ap.region = '" . $regions[$i] . "'";
+        
+        			if($i+1 != count($regions)){
+        				$command = $command . " OR ";
+        			}
+        		}
+        		 
+        		$command = $command . ") ";
+        	}
+        	 
         	return $command;
         }
         
@@ -107,15 +135,15 @@
         }
         
     public function getValidAirports(){
-        	$command = "SELECT ap.airport_name "
-					."FROM se_Airports ap "
-					."LEFT JOIN se_Departure as d "
-						."ON ap.airport_name = d.departure_airport "
-					."LEFT JOIN se_Arrival as a "
-						."ON ap.airport_name = a.arrival_airport "
-					."WHERE d.departure_airport = ap.airport_name " 
-						."OR a.arrival_airport = ap.airport_name "
-					."GROUP BY airport_name;";
+        	$command = "SELECT ap.airport_name " 
+        				."FROM se_Airports ap " 
+						."LEFT JOIN se_Flights as f1 "
+							."ON ap.airport_name = f1.departure_airport " 
+						."LEFT JOIN se_Flights as f2 "
+							."ON ap.airport_name = f2.arrival_airport " 
+						."WHERE f1.departure_airport = ap.airport_name "  
+							."OR f2.arrival_airport = ap.airport_name " 
+						."GROUP BY airport_name;";
         	return $command;	
         }
         
@@ -210,5 +238,59 @@
         	return $command;
         }
         
+        public function getFlightCancelations($request){
+        	$command = "SELECT f.flight_number, "
+        				."f.departure_date, "
+        				."f.departure_time as filed_depart, "
+        				."f.arrival_date, "
+        				."f.arrival_time as filed_arrival, "
+        				."a.amendment_description "
+        				."FROM se_Flights f "
+						."INNER JOIN se_Cancelation c "
+							."ON c.flight_number = f.flight_number "
+						."INNER JOIN se_Amendment a "
+							."ON a.cancelation_id = c.cancelation_id "
+						."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+							."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+							."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+							."AND f.departure_date <= '" . $request->fields['endDate'] . "';";
+        	return $command;
+        }
+        
+        public function getDelaysByRegions($request){
+        	$command = "SELECT region, SUM(numberOfDelays) "
+        				."FROM ( " 
+        					."SELECT * FROM ( "
+        						."SELECT ap.region, COUNT(ap.region) as numberOfDelays "
+								."FROM se_Flights f "
+								."INNER JOIN se_Departure d "
+									."ON f.flight_number = d.flight_number " 
+								."INNER JOIN se_Arrival a "
+									."ON f.flight_number = a.flight_number "
+								."INNER JOIN se_Airports as ap "
+									."ON f.departure_airport = ap.airport_name "
+								."WHERE (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "
+									."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+									."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+									.$this->getRegionRestrictions()
+								."GROUP BY (ap.region)) s1	"
+								."UNION "
+							."SELECT * FROM ( "
+								."SELECT ap.region, COUNT(ap.region) as numberOfDelays "
+								."FROM se_Flights f "
+								."INNER JOIN se_Departure d "
+									."ON f.flight_number = d.flight_number " 
+								."INNER JOIN se_Arrival a "
+									."ON f.flight_number = a.flight_number "
+								."INNER JOIN se_Airports as ap "
+									."ON f.arrival_airport = ap.airport_name "
+								."WHERE (d.departure_time > f.departure_time OR a.arrival_time > f.arrival_time) "	
+									."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+									."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+									.$this->getRegionRestrictions()
+								."GROUP BY (ap.region)) s2) as t "
+						."GROUP BY region;";
+        	return $command;
+        }
     }
 ?>

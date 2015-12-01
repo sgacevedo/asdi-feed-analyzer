@@ -32,6 +32,10 @@ body {
 i{
     padding-right: 10px;
 }
+#airspace .table-cell{
+  width: 50%;
+  vertical-align: top;
+}
 #signOut form{
     margin-bottom: 0;
 }

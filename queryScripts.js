@@ -1,3 +1,5 @@
+var MAP;
+
 $(document).ready(function(){
 	var url = window.location.toString();
 	url = url.split('?');
@@ -68,3 +70,21 @@ $(function() {
     	}
     });
 });
+
+function initMap(){
+	MAP = L.map('map').setView([35, -97], 4);
+	L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token={accessToken}', {
+	    
+	    maxZoom: 18,
+	    id: 'sgacevedo.oa9j8l4j',
+	    accessToken: 'pk.eyJ1Ijoic2dhY2V2ZWRvIiwiYSI6ImNpaG1udmVhczA2eXR1Mmo3YXRweGUyOHMifQ.dWZwd_Obb8axH0Ti4azpUg'
+	}).addTo(MAP);
+}
+
+function addLine(startLat, startLong, endLat, endLong){
+	var polygon = L.polygon([
+	                 	    [startLat, startLong],
+	                 	    [endLat, endLong]
+	                 	],
+	                 	{color: 'red'}).addTo(MAP);
+}

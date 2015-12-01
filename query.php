@@ -112,7 +112,43 @@
     			</div>
     			<div id="airspace" class="tab-pane fade">
       				<h3>Airspace</h3>
-      				<p>Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam.</p>
+      				<div class="table">
+      					<div class="table-row">
+      						<div class="table-cell">
+      							<form method="post" action="query.php?tab=airspace">
+	      							<div id="airspaceDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+									    <i class="fa fa-calendar"></i>&nbsp;
+									    <span></span> <b class="caret"></b>
+									</div>
+									<input type="hidden" name="AIRSPACE_STARTDATE" class="startDate"/>
+									<input type="hidden" name="AIRSPACE_ENDDATE" class="endDate" />
+									<div id="airspaceSelect" class="" style="margin-top: 10px">
+										<label for="airport">List Airpsaces By: </label>
+									    <div class="radio">
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByFlights" checked>Number of flights</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays" checked>Number of delayed flights</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByMessages" checked>Number of cancelation messages</label>
+										</div>
+									</div>
+									<div style="margin-top: 20px">
+										<button type="submit" class="btn btn-success">Run</button>
+									</div>
+								</form>
+      						</div>
+      						<div class="table-cell">
+      							<div id="map" style="height: 600px;">
+      								<!--<script type="text/javascript">
+										$(document).ready(function(){ initMap(); });
+      								</script>-->
+      							</div>
+      						</div>
+      					</div>
+      				</div>
+      				<div class="results"><?php require_once 'Queries/AirspaceQuery.php';?></div>
     			</div>
     			<div id="flights" class="tab-pane fade">
       				<h3>Flights</h3>
@@ -158,7 +194,21 @@
     			</div>
     			<div id="regions" class="tab-pane fade">
       				<h3>Regions</h3>
-      				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      				<form method="post" action="query.php?tab=regions">
+	      				<div id="regionDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+						    <i class="fa fa-calendar"></i>&nbsp;
+						    <span></span> <b class="caret"></b>
+						</div>
+						<input type="hidden" name="REGION_STARTDATE" class="startDate"/>
+						<input type="hidden" name="REGION_ENDDATE" class="endDate" />
+						<div id="delaysByRegions" class="checkbox">
+							<label><input type="checkbox" name="REGION_DELAYS" value="" checked disabled>List in order the regions with the most delays</label>
+						</div>
+						<div style="margin-top: 20px">
+							<button type="submit" class="btn btn-success">Run</button>
+						</div>
+					</form>
+					<div class="results"><?php require_once 'Queries/RegionQuery.php';?></div>
     			</div>
   			</div>
         <?php

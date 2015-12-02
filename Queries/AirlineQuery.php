@@ -90,6 +90,10 @@
 			
 			$table = $table . '</tbody></table>';
 			
+			if($rows > 0){
+				$table = $table . '<button type="button" class="btn btn-primary generateModel" onClick="' .$request->type. '(this)">Generate Model</button>';
+			}
+			
 			if($request->type == 'getProbabilityOfDelay' && $rows > 0){
 				$delayPercentage = round(($delays/$total) * 100, 2);
 				$table = $table . '<h4>' . $_POST['AIRLINE_NAME'] . ' probability of delays departing from the ' . $_POST['AIRLINE_REGION'] . ': <span class="label label-default">' . $delayPercentage . '%</span></h4>';
@@ -97,5 +101,4 @@
 		}
 	}
 	echo $table;
-	
 ?>

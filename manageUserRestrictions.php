@@ -86,12 +86,12 @@ $rows = $results->num_rows;
 				?>
 				<tr>
 					<td><?php echo $restriction_id; ?></td>
-					<td><?php echo $user_id; ?></td>
+					<td><?php echo $userID; ?></td>
 					<td><?php echo $airline_name; ?></td>
 					<td><?php echo $status; ?></td>
 					<td><?php
 				echo '<form action="manageUserRestrictions.php" method="POST">
-							<button type="submit" class="btn btn-success">Request to Delete</button>
+							<button type="submit" class="btn btn-danger">Remove</button>
 							<input type="hidden" name="AdeleteUID" value="user_id">
 							<input type="hidden" name="AdeleteRID" value="restriction_id" >
 						</form>';
@@ -180,7 +180,7 @@ $rows2 = $results2->num_rows;
 					<td><?php echo $status; ?></td>
 					<td><?php
 				echo '<form action="manageUserRestrictions.php" method="POST">
-							<button type="submit" class="btn btn-success">Request to Delete</button>
+							<button type="submit" class="btn btn-danger">Remove</button>
 							<input type="hidden" name="RdeleteUID" value="user_id">
 							<input type="hidden" name="RdeleteRID" value="restriction_id" >
 						</form>';

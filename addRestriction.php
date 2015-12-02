@@ -9,75 +9,172 @@
 				require_once 'UI/navBar.php'; ?>
 
 	<div class="contents">
+	<div id="insertSuccess" class="alert alert-success" style="display: none">
+		<strong><i class="fa fa-check"></i>Success</strong> Your request was successfully submitted.
+	</div>
+	<div id="insertFail" class="alert alert-danger" style="display: none">
+		<strong><i class="fa fa-times"></i>Unsuccessful</strong> Your request was not submitted.
+	</div>
 	<h1>Request a User Restriction</h1>
 <?php 
-	  if ($_POST){
-	  	$dbMan = new DatabaseManager ();
-	  	if (! $dbMan->establishConnection ()) {
-	  		// database connection error
-	  		return;
+	if(isset($_POST['REGION_USER']) || isset($_POST['AIRLINE_USER'])){
+		$result;
+		
+		if (isset($_POST['REGION_USER']) && isset($_POST['REGION'])){
+			$userId = $_POST['REGION_USER'];
+			$restriction = $_POST['REGION'];
+			$result = $user->addRestrictionRequest($userId, 'region', $restriction);
 	  	}
+	  	else if (isset($_POST['AIRLINE_USER']) && isset($_POST['AIRLINE'])){
+	  		$userId = $_POST['AIRLINE_USER'];
+	  		$restriction = $_POST['AIRLINE'];
+	  		$result = $user->addRestrictionRequest($userId, 'airline', $restriction);
+	  	}
+	  	
+	  	if($result){
+	  		echo '<script type="text/javascript">$(document).ready(function(){success();});</script>';
+	  	}
+	  	else{
+	  		echo '<script type="text/javascript">$(document).ready(function(){fail();});</script>';
+	  	}
+	} 
 
-	  	if(isset($_POST['AirRestriction'])){ 	
-	  		
-	  	  //insert into Airline Restrictions
-	  	  $command="INSERT INTO se_Airline_Restrictions (restriction_id, user_id, airline_name, status) "
-			." VALUES ('IIII,'UUUU','NNNN', 'PENDING_APPROVAL');";
-		  $command = str_replace('IIII',$_POST['restriction_id'],$command);
-		  $command = str_replace('UUUU',$_POST['user_id'],$command);
-		  $command = str_replace('NNNN',$_POST['airline_name'],$command);
+		function getUsers(){
+			$dbMan = new DatabaseManager();
 
-		  echo "COMMAND:<br>" . $command . "<br><br>";
-		  //$results = $dbMan->executeQuery($request);
-		  //need to execute request
-		  $result = mysql_query($command, $dbMan);
-		  
-		  if ($result){
-			echo "SUCCESS!";
-		  }else{
-			echo "FAILED, error: " . mysql_error();
-		  }
-	  	}
-	  	else if(isset ($_POST['RegRestriction'])){
-		  //insert into Region Restrictions
-		  $command2="INSERT INTO se_Region_Restrictions (restriction_id, user_id, region, status) "
-		  		." VALUES ('AAAA','BBBB','CCCC', 'PENDING_APPROVAL');";
-		  $command2 = str_replace('AAAA',$_POST['restriction_id'],$command);
-		  $command2 = str_replace('BBBB',$_POST['user_id'],$command);
-		  $command2 = str_replace('CCCC',$_POST['region'],$command);
-		  
-		  echo "COMMAND:<br>" . $command2 . "<br><br>";
-		  $result2 = mysql_query($command2, $dbMan);
-		  
-		  if ($result2){
-		  	echo "SUCCESS!";
-		  }else{
-		  	echo "FAILED, error: " . mysql_error();
-		  }
-	  	}
-		  mysql_close($dbMan);
+			if(!$dbMan->establishConnection()){
+				//database connection error
+				return;
+			}
+			
+			$request = new Request ('SELECT *', 'se_Users');
+			$request->transformCommand();
+			
+			$users = $dbMan->executeQuery($request);
+			
+			//server error
+			if($users == null){
+				//request was unsuccessful
+			}
+			
+			else if($users -> num_rows){
+			
+				/* Get number of rows returned */
+				$rows = $users->num_rows;
+			
+				/* For each row - push the airline name
+				 * onto the $airlines array */
+				for ($i = 0 ; $i < $rows ; ++$i){
+					$users->data_seek($i);
+					$row = $users->fetch_array(MYSQLI_NUM);
+						
+					echo "<option value='" . $row[0] ."'>" . $row[1] . " " . $row[2] . "</option>";
+			
+				}
+			}
+		}
+		
+		function getAirlines(){
+			$dbMan = new DatabaseManager();
+
+			if(!$dbMan->establishConnection()){
+				//database connection error
+				return;
+			}
+				
+			$request = new Request ('SELECT *', 'se_Airlines');
+			$request->transformCommand();
+				
+			$users = $dbMan->executeQuery($request);
+				
+			//server error
+			if($users == null){
+				//request was unsuccessful
+			}
+				
+			else if($users -> num_rows){
+					
+				/* Get number of rows returned */
+				$rows = $users->num_rows;
+					
+				/* For each row - push the airline name
+				 * onto the $airlines array */
+				for ($i = 0 ; $i < $rows ; ++$i){
+					$users->data_seek($i);
+					$row = $users->fetch_array(MYSQLI_NUM);
+			
+					echo "<option>" . $row[0] . "</option>";
+						
+				}
+			}
 		}
 	?>
-	  <form action='addRestriction.php' method='POST'>
-	  	<br>Restriction ID:
-	  	<br><input type='text' name='restriction_id' placeholder= '1234'/>
-	    <br>User ID:
-	    <br><input type='text' name='user_id' placeholder='1234' />
-		<br>Airline Name:
-		<br><input type='text' name='airline_name' placeholder='Airline Name'/>
-	  	<br><br><input type='submit' name= "AirRestriction" value= 'Request Airline Restriction'/>
-	  </form>
+		<form>
+			<label for="restrictionType">Select Restriction Type:</label>
+			<select id="restrictionType" class="form-control" style="width: 400px">
+				<option>Region</option>
+				<option>Airline</option>
+			</select>
+		</form>
+		
+		<form action='addRestriction.php' method='POST' id="airlineRestriction" style="display: none">
+		    <label for="user">User: </label>
+			<select id="user" class="form-control user" style="width: 400px">
+				<?php getUsers();?>
+			</select>
+			<input type="hidden" name="AIRLINE_USER" value="2"/>
+			<label for="airline">Restricted Airline: </label>
+			<select id="airline" class="form-control" style="width: 400px" name="AIRLINE">
+				<?php getAirlines();?>
+			</select>
+			<div style="margin-top: 20px">
+				<button type="submit" class="btn btn-success">Submit</button>
+			</div>
+	  	</form>
 	  
-	   <form action='addRestriction.php' method='POST'>
-	  	<br>Restriction ID:
-	  	<br><input type='text' name='restriction_id' placeholder= '1234'/>
-	    <br>User ID:
-	    <br><input type='text' name='user_id' placeholder='1234' />
-		<br>Region:
-		<br><input type='text' name='airspace_id' placeholder='North'/>
-	  	<br><br><input type='submit' name='RegRestriction' value ='Request Region Restriction'/>
-	  </form>
-	
+	  	<form action='addRestriction.php' method='POST' id="regionRestriction" >
+		  	<label for="user">User:</label>
+			<select id="user" class="form-control user" style="width: 400px">
+				<?php getUsers();?>
+			</select>
+			<input type="hidden" name="REGION_USER" value="2"/>
+			<label for="region">Restricted Region: </label>
+			<select id="region" class="form-control" style="width: 400px" name="REGION">
+				<option>West</option>
+				<option>South</option>
+				<option>Midwest</option>
+				<option>Northeast</option>
+			</select>
+			<div style="margin-top: 20px">
+				<button type="submit" class="btn btn-success">Submit</button>
+			</div>
+	  	</form>
 	</div>
+	
+	<script type="text/javascript">
+		$("#restrictionType").change(function(){
+			if($(this).val() == 'Region'){
+				$('#airlineRestriction').hide();
+				$('#regionRestriction').show();
+			}
+			else if($(this).val() == 'Airline'){
+				$('#airlineRestriction').show();
+				$('#regionRestriction').hide();
+			}
+		});
+
+		$('.user').change(function(){
+			user_id = $(this).find("option:selected").prop("value");
+			hiddenField = $(this).siblings('input[type="text"]');
+			hiddenField.val(user_id);
+		});
+
+		function success(){
+			$('#insertSuccess').show();
+		}
+		function fail(){
+			$('#insertFail').show();
+		}
+	</script>
 </body>
 </html>

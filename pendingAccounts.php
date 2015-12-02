@@ -106,7 +106,7 @@
 					<td><?php echo $status ?></td>
 					<td><?php
 							echo <<<_END
-						<form action="manageAccounts.php" method="POST">
+						<form action="pendingAccounts.php" method="POST">
 							<button type="submit" class="btn btn-success">Approve</button>
 							<input type="hidden" name="approveUser" value='$user_id'>
 						</form>
@@ -115,7 +115,7 @@ _END
 					</td>
 					<td><?php
 							echo <<<_END
-						<form action="manageAccounts.php" method="POST"?>
+						<form action="pendingAccounts.php" method="POST"?>
 							<button type="submit" class="btn btn-danger">Deny</button>
 							<input type="hidden" name="denyUser" value='$user_id'>
 						</form>

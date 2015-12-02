@@ -24,3 +24,9 @@
 <!-- Leaflet Javascript library -->
 <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
 <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+
+
+<!-- HighCharts -->
+<script type="text/javascript" src="UI/Highcharts-4.1.9/js/highcharts.js"></script>
+<script type="text/javascript" src="UI/Highcharts-4.1.9/js/modules/exporting.js"></script>
+<script type="text/javascript" src="models.js"></script>

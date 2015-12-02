@@ -22,6 +22,7 @@ class CommandConstructor
 				$request->dbTable == 'se_Airlines' ||
 				$request->dbTable == 'se_Airports' ||
 				$request->dbTable == 'se_Region_Restrictions' ||
+        		$request->dbTable == 'se_Airline_Restrictions' ||
 				$request->dbTable == 'se_Airspaces'){
         	
         	//create ASDICommandConstructor instance

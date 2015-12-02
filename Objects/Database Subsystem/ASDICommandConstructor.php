@@ -8,7 +8,13 @@
         public function transformCommand($request){
             $command = '';
             
-            if($request->type == 'getDelaysByAirlines'){
+        	if($request->type == 'SELECT *'){
+            	$command = $this->selectAll($request);
+            }
+            else if($request->type == 'INSERT'){
+            	$command = $this->insert($request);
+            }
+            else if($request->type == 'getDelaysByAirlines'){
             	$command = $this->getDelaysByAirlines($request);
             }
             else if($request->type == 'getProbabilityOfDelay'){
@@ -50,10 +56,77 @@
             else if($request->type == 'getAirspacesByDelays'){
             	$command = $this->getAirspacesByDelays($request);
             }
+            else if($request->type == 'getMessages'){
+            	$command = $this->getMessages($request);
+            }
             return $command;
         }
         
-    public function getAirlineRestrictions(){
+        //SELECT * sql command
+        public function selectAll($request){
+        	//counter
+        	$i = 1;
+        	
+        	//number of parameters included in the request
+        	$numParameters = count($request->fields);
+       	
+       		//command - sql sting
+       		$command = 'SELECT * FROM ' . $request->dbTable;
+        	
+       		//if there are parameters for where clause
+       		if(count($request->fields) > 0){
+       	
+       			$command = $command . ' WHERE ';
+       	
+       			//for each item in the array
+       			foreach($request->fields as $field => $value) {
+       				$command = $command . $field . ' = "' . $value . '" ';
+       	
+       				//if not last element in array - add 'AND '
+       				if($i++ != $numParameters) {
+       					$command = $command . 'AND ';
+       				}
+        		}
+       		}
+       		return $command;
+        }
+        
+        //INSERT sql command
+        public function insert($request){
+        	//counter
+        	$i = 1;
+        	
+        	//number of parameters included in the request
+        	$numParameters = count($request->fields);
+        	
+        	//comamand - sql string
+        	$command = 'INSERT INTO ' . $request->dbTable . ' (';
+        	
+        	//values string
+        	$values = 'VALUES (';
+        	
+        	//for each item in the array
+        	foreach($request->fields as $field => $value) {
+        	
+        		$command = $command . $field;
+        		$values = $values . '"' . $value . '"';
+        	
+        		//if last element in array - close paraenthesis
+        		if($i++ == $numParameters) {
+        			$command = $command . ') ';
+        			$values = $values . ');';
+        		}
+        		//otherwise, not last element in array - add comma
+        		else{
+        			$command = $command . ', ';
+        			$values = $values . ', ';
+        		}
+        	}
+        	
+        	return $command = $command . ''. $values;
+        }
+        	
+    	public function getAirlineRestrictions(){
         	$command = '';
         	
         	/* If the current user is a general user, only show the airlines they are not restricted to */
@@ -337,6 +410,111 @@
 							."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
 						."GROUP BY t.airspace_id "
 						."ORDER BY COUNT(t.airspace_id) DESC;";
+        	return $command;
+        }
+        
+        public function getMessages($request){
+        	$command = 'SELECT * FROM (';
+        	
+        	$union = '';
+        	
+        	if($request->fields['getAmendments']){
+        		$union = $union ."SELECT "
+        							."c.flight_number, "
+        							."c.cancelation_date as Date, "
+        							."c.cancelation_time as Time, "
+        							."CONCAT('Cancelation','') as MessageType, "
+        							."a.amendment_description as MessageDescription "
+								."FROM se_Flights as f "
+								."INNER JOIN se_Cancelation as c "
+									."ON c.flight_number = f.flight_number " 
+								."INNER JOIN se_Amendment as a "
+									."ON a.cancelation_id = c.cancelation_id "
+								."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+									."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+									."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+									."AND f.departure_date <= '" . $request->fields['endDate'] . "' ";
+        	}
+        	
+        	if($request->fields['getCrossing']){
+        		if(strlen($union) > 0){
+        			$union = $union . "UNION ";
+        		}
+        		$union = $union ."SELECT "
+        							."c.flight_number, "
+        							."c.crossing_date as Date, "
+        							."c.crossing_time as Time, "
+        							."CONCAT('Crossing','') as MessageType, "
+        							."CONCAT('Flight ', CONCAT(f.flight_number ,CONCAT(CONCAT(CONCAT(' crossed from airspace ', c.exit_airspace_id), ' to '), c.entry_airspace_id)))as MessageDescription "
+								."FROM se_Flights as f "
+								."INNER JOIN se_Crossing as c "
+									."ON c.flight_number = f.flight_number "
+        						."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+        							."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+       								."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+        							."AND f.departure_date <= '" . $request->fields['endDate'] . "' ";
+        	}
+        	
+        	if($request->fields['getDeparture']){
+        		if(strlen($union) > 0){
+        			$union = $union . "UNION ";
+        		}
+        		$union = $union ."SELECT "
+        							."d.flight_number, "
+        							."d.departure_date as Date, "
+        							."d.departure_time as Time, "
+        							."CONCAT('Departure','') as MessageType, "
+        							."CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT('Flight ', f.flight_number), ' arrived at '), f.departure_airport), ' on '), d.departure_date), ' at '), d.departure_time) as MessageDescription "
+								."FROM se_Flights as f "
+								."INNER JOIN se_Departure as d "
+									."ON d.flight_number = f.flight_number "
+        						."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+        							."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+        							."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+        							."AND f.departure_date <= '" . $request->fields['endDate'] . "' ";
+        	}
+        	
+        	if($request->fields['getArrival']){
+        		if(strlen($union) > 0){
+        			$union = $union . "UNION ";
+        		}
+        		$union = $union ."SELECT "
+        							."a.flight_number, "
+        							."a.arrival_date as Date, "
+        							."a.arrival_time as Time, "
+        							."CONCAT('Arrival','') as MessageType, "
+        							."CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT(CONCAT('Flight ', f.flight_number), ' arrived at '), f.departure_airport), ' on '), a.arrival_date), ' at '), a.arrival_time) as MessageDescription "
+								."FROM se_Flights as f "
+								."INNER JOIN se_Arrival as a "
+									."ON a.flight_number = f.flight_number "
+        						."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+        							."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+        							."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+        							."AND f.departure_date <= '" . $request->fields['endDate'] . "' ";
+        	}
+        	
+        	if($request->fields['getTracking']){
+        		if(strlen($union) > 0){
+        			$union = $union . "UNION ";
+        		}
+        		$union = $union ."SELECT "
+        							."t.flight_number, "
+        							."f.departure_date as Date, "
+        							."t.tracking_time as Time, "
+        							."CONCAT('Tracking','') as MessageType, "
+        							."CONCAT(t.tracking_time, CONCAT(CONCAT(CONCAT(' - Flight ', f.flight_number), ' is in airspace '), t.airspace_id)) as MessageDescription "
+								."FROM se_Flights as f "
+								."INNER JOIN se_Tracking as t "
+									."ON t.flight_number = f.flight_number "
+        						."WHERE f.departure_airport = '" . $request->fields['depart_airport'] . "' "
+        							."AND f.arrival_airport = '" . $request->fields['arrival_airport'] . "' "
+        							."AND f.departure_date >= '" . $request->fields['startDate'] . "' "
+        							."AND f.departure_date <= '" . $request->fields['endDate'] . "' ";
+        	}
+        	
+        	/* Joing Command and Union */
+        	$command = $command  . $union . ") as s ORDER BY " . $request->fields['orderBy'];
+        	
         	return $command;
         }
     }

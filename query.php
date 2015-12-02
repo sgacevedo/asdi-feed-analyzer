@@ -10,6 +10,7 @@
             require_once 'UI/navBar.php'; ?>
 		<script type="text/javascript" src="queryScripts.js" ></script>
         <div class="contents">
+        	<!-- <button type="button" class="btn btn-primary" onclick="testing()">Generate PDF</button>-->
         	<h1>Analyze</h1>
         	<ul class="nav nav-tabs">
     			<li class="active"><a data-toggle="tab" href="#airlines">Airlines</a></li>
@@ -75,7 +76,10 @@
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
       				</form>
-      				<div class="results"><?php require_once 'Queries/AirlineQuery.php';?></div>
+      				<div class="results">
+      					<?php require_once 'Queries/AirlineQuery.php';?>
+      					<div class="model"></div>
+      				</div>
     			</div>
    				<div id="airports" class="tab-pane fade">
       				<h3>Airports</h3>
@@ -186,7 +190,47 @@
     			</div>
     			<div id="messages" class="tab-pane fade">
       				<h3>Messages</h3>
-      				<p>Eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.</p>
+      				<form method="post" action="query.php?tab=messages">
+	      				<div id="messageDateRange"  class="dateRange" style="background: #fff; cursor: pointer; padding: 5px 10px; border: 1px solid #ccc; width: 400px">
+						    <i class="fa fa-calendar"></i>&nbsp;
+						    <span></span> <b class="caret"></b>
+						</div>
+						<input type="hidden" name="MESSAGE_STARTDATE" class="startDate"/>
+						<input type="hidden" name="MESSAGE_ENDDATE" class="endDate" />
+						<div id="departAirportSelect" class="" style="margin-top: 10px">
+							<label for="departAirport">Departure Airport: </label>
+						    <select name="MESSAGE_DEPARTING_AIRPORT" class="form-control" id="departAirport" style="width: 400px" >
+						  		<?php getValidAirports(); ?>
+					        </select>
+						</div>
+						<div id="arrivalAirportSelect" class="" style="margin-top: 10px">
+							<label for="arrvialAirport">Arrival Airport: </label>
+						    <select name="MESSAGE_ARRIVAL_AIRPORT" class="form-control" id="arrvialAirport" style="width: 400px" >
+						  		<?php getValidAirports(); ?>
+					        </select>
+						</div>
+						<label for="messagesSelect" style="margin-top: 20px;">Select Types of Messages: </label>
+						<div id="messagesSelect" class="checkbox" style="margin-top: 0px !important;">
+							<label><input type="checkbox" name="MESSAGES_AMENDMENTS" value="" >Amendments/Cancelations</label><br />
+							<label><input type="checkbox" name="MESSAGES_CROSSINGS" value="" >Crossings</label><br />
+							<label><input type="checkbox" name="MESSAGES_DEPARTURES" value="" >Departures</label><br />
+							<label><input type="checkbox" name="MESSAGES_ARRIVALS" value="" >Arrivals</label><br />
+							<label><input type="checkbox" name="MESSAGES_TRACKING" value="" >Tracking</label><br />
+						</div>
+						<div id="messageSortSelect">
+							<label for="airport" style="margin-bottom: 0px !important;">Sort Messages by: </label>
+							<div class="radio">
+								<label><input type="radio" name="SORT_SElECT" value="sort_by_type" checked>Message type</label>
+							</div>
+							<div class="radio">
+							  	<label><input type="radio" name="SORT_SElECT" value="sort_by_flightNumber" >Flight number</label>
+							</div>
+						</div>
+						<div style="margin-top: 20px">
+							<button type="submit" class="btn btn-success">Run</button>
+						</div>
+      				</form>
+      				<div class="results"><?php require_once 'Queries/MessageQuery.php';?></div>
     			</div>
     			<div id="regions" class="tab-pane fade">
       				<h3>Regions</h3>

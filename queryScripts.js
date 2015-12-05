@@ -110,18 +110,9 @@ function removeLines(){
 	MAP.removeLayer(LINE);
 }
 
-function testing(){
-	//alert(1);
-	
-	var doc = new jsPDF();
-
-	// All units are in the set measurement for the document
-	// This can be changed to "pt" (points), "mm" (Default), "cm", "in"
-	doc.fromHTML($('#airlines .results').get(0), 15, 15, {
-		'width': 170, 
-		'elementHandlers': true
-	});
-	
-	doc.save('Test.pdf');
-
+function exportReport(){
+	var data = $('#airlines .results').html();
+    var OpenWindow = window.open("exportReport.php", "mywin", '');
+    OpenWindow.dataFromParent = data; // dataFromParent is a variable in child.html
+    OpenWindow.init();
 }

@@ -3,6 +3,15 @@
         <?php
             require_once 'UI/styleIncludes.php' ?>
         <title>ASDI Query</title>
+        <style type="text/css">
+        	.export{
+        		display: none;
+        		float: right;
+        	}
+        	.generateModel{
+        		float: left;
+        	}
+        </style>
     </head>
     <body>
         <?php
@@ -10,7 +19,6 @@
             require_once 'UI/navBar.php'; ?>
 		<script type="text/javascript" src="queryScripts.js" ></script>
         <div class="contents">
-        	<!-- <button type="button" class="btn btn-primary" onclick="testing()">Generate PDF</button>-->
         	<h1>Analyze</h1>
         	<ul class="nav nav-tabs">
     			<li class="active"><a data-toggle="tab" href="#airlines">Airlines</a></li>
@@ -79,6 +87,7 @@
       				<div class="results">
       					<?php require_once 'Queries/AirlineQuery.php';?>
       					<div class="model"></div>
+      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
       				</div>
     			</div>
    				<div id="airports" class="tab-pane fade">
@@ -112,7 +121,9 @@
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
       				</form>
-      				<div class="results"><?php require_once 'Queries/AirportQuery.php';?></div>
+      				<div class="results"><?php require_once 'Queries/AirportQuery.php';?>
+      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      				</div>
     			</div>
     			<div id="airspace" class="tab-pane fade">
       				<form method="post" action="query.php?tab=airspace">
@@ -148,7 +159,9 @@
 	      					</div>
 	      				</div>
       				</form>
-      				<div class="results"><?php require_once 'Queries/AirspaceQuery.php';?></div>
+      				<div class="results"><?php require_once 'Queries/AirspaceQuery.php';?>
+      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      				</div>
     			</div>
     			<div id="flights" class="tab-pane fade">
       				<h3>Flights</h3>
@@ -186,7 +199,9 @@
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
       				</form>
-      				<div class="results"><?php require_once 'Queries/FlightQuery.php';?></div>
+      				<div class="results"><?php require_once 'Queries/FlightQuery.php';?>
+      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      				</div>
     			</div>
     			<div id="messages" class="tab-pane fade">
       				<h3>Messages</h3>
@@ -230,7 +245,9 @@
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
       				</form>
-      				<div class="results"><?php require_once 'Queries/MessageQuery.php';?></div>
+      				<div class="results"><?php require_once 'Queries/MessageQuery.php';?>
+      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      				</div>
     			</div>
     			<div id="regions" class="tab-pane fade">
       				<h3>Regions</h3>
@@ -250,6 +267,7 @@
 					</form>
 					<div class="results"><?php require_once 'Queries/RegionQuery.php';?>
 						<div class="model"></div>
+						<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
 					</div>
     			</div>
   			</div>
@@ -287,6 +305,16 @@
 						
 					}
 				}
+			}
+			
+			function showExportButton($selector){
+				echo <<<_END
+					<script type="text/javascript">
+						$(document).ready(function(){
+    						$('$selector').show();
+    					});
+					</script>
+_END;
 			}
             ?>
 

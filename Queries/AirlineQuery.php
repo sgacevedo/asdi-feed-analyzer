@@ -98,6 +98,7 @@
 				$delayPercentage = round(($delays/$total) * 100, 2);
 				$table = $table . '<h4>' . $_POST['AIRLINE_NAME'] . ' probability of delays departing from the ' . $_POST['AIRLINE_REGION'] . ': <span class="label label-default">' . $delayPercentage . '%</span></h4>';
 			}
+			showExportButton('#airlines .export');
 		}
 	}
 	echo $table;

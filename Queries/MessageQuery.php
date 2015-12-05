@@ -108,7 +108,8 @@ $table = '';
 			}
 				
 			$table = $table . '</tbody></table>';
-				
+
+			showExportButton('#messages .export');
 		}
 	}
 	

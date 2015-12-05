@@ -100,6 +100,7 @@
 			
 			$table = $table . '</tbody></table><script type="text/javascript">$(document).ready(function(){ initMap(); });</script>';
 			
+			showExportButton('#airspace .export');
 		}
 	}
 	echo $table;

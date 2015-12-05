@@ -87,7 +87,7 @@
       				<div class="results">
       					<?php require_once 'Queries/AirlineQuery.php';?>
       					<div class="model"></div>
-      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
    				<div id="airports" class="tab-pane fade">
@@ -122,7 +122,7 @@
 						</div>
       				</form>
       				<div class="results"><?php require_once 'Queries/AirportQuery.php';?>
-      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
     			<div id="airspace" class="tab-pane fade">
@@ -160,7 +160,7 @@
 	      				</div>
       				</form>
       				<div class="results"><?php require_once 'Queries/AirspaceQuery.php';?>
-      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
     			<div id="flights" class="tab-pane fade">
@@ -200,7 +200,7 @@
 						</div>
       				</form>
       				<div class="results"><?php require_once 'Queries/FlightQuery.php';?>
-      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
     			<div id="messages" class="tab-pane fade">
@@ -246,7 +246,7 @@
 						</div>
       				</form>
       				<div class="results"><?php require_once 'Queries/MessageQuery.php';?>
-      					<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+      					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
     			<div id="regions" class="tab-pane fade">
@@ -267,7 +267,7 @@
 					</form>
 					<div class="results"><?php require_once 'Queries/RegionQuery.php';?>
 						<div class="model"></div>
-						<div class="export"><button type="button" class="btn btn-success" onclick="exportReport()">Export Report</button></div>
+						<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
 					</div>
     			</div>
   			</div>

@@ -125,6 +125,8 @@
 			else if($request->type == 'getDelayedArrivalsByAirport'){
 				$table = $table . '<h4>Number of delayed flights arriving to ' . $request->fields['airport'] . ' between ' . $request->fields['startDate'] . ' and ' . $request->fields['endDate'] . ': <span class="label label-default">' . $rows . '</span></h4>';
 			}
+			
+			showExportButton('#airports .export');
 		}
 	}
 	echo $table;

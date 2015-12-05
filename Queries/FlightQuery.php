@@ -134,6 +134,8 @@
 			else if($request->type == 'getOnTimeFlights' && $rows > 0){
 				$table = $table . '<h4>Number of on-time flights from ' . $request->fields['depart_airport'] . ' to ' . $request->fields['arrival_airport'] . ' between ' . $request->fields['startDate'] . ' and ' . $request->fields['endDate'] . ': <span class="label label-default">' . $rows . '</span></h4>';
 			}
+			
+			showExportButton('#flights .export');
 		}
 	}
 	echo $table;

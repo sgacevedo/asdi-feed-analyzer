@@ -61,6 +61,8 @@
 			$table = $table . '</tbody></table>';
 			
 			$table = $table . '<button type="button" class="btn btn-primary generateModel" onClick="' .$request->type. '(this)">Generate Model</button>';
+			
+			showExportButton('#regions .export');
 		}
 	}
 	echo $table;

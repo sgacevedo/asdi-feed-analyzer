@@ -110,9 +110,12 @@ function removeLines(){
 	MAP.removeLayer(LINE);
 }
 
-function exportReport(){
-	var data = $('#airlines .results').html();
-    var OpenWindow = window.open("exportReport.php", "mywin", '');
-    OpenWindow.dataFromParent = data; // dataFromParent is a variable in child.html
-    OpenWindow.init();
-}
+$(function(){
+	$('.export').click(function(){
+		var container = $(this).parents('.tab-pane').attr('id');
+		var data = $('#' + container + ' .results').html();
+	    var OpenWindow = window.open("exportReport.php", "mywin", '');
+	    OpenWindow.dataFromParent = data; // dataFromParent is a variable in child.html
+	    OpenWindow.init();
+	});
+});

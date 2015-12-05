@@ -8,6 +8,16 @@ function getDelaysByAirlines(button){
 	createColumnChart(outputContainer, xAxis, yAxis, values, title);
 }
 
+function getDelaysByRegions(button){
+	button.remove();
+	var outputContainer = $('#regions .results .model');
+	var xAxis = $('#regions .results table tr td:nth-child(1)');
+	var yAxis = $('#regions .results table tr th:nth-child(2)').html();
+	var values = $('#regions .results table tr td:nth-child(2)');
+	var title = "Number of Delayed Flights by Regions"
+	createColumnChart(outputContainer, xAxis, yAxis, values, title);
+}
+
 function createColumnChart(outputContainer, xAxis, yAxis, values, title){
 	var xValues = new Array();
 	var vals = new Array();

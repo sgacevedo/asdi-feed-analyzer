@@ -1,204 +1,255 @@
-<!-- Manage User Restrictions- Administrator
-Requests to add a restriction on a user. 
-Requests to remove a restriction on a user.
--->
 <html>
-<head>
-    <?php require_once 'UI/styleIncludes.php'?>
-	<title>Manage User Restrictions</title>
-</head>
-<body>
-<?php
-require_once 'requires.php';
-require_once 'UI/navBar.php';
-?>
-
-<div class="contents">
-<?php
-
-//delete a restriction
-if(isset($_POST['AdeleteUID']) &&isset($_POST['AdeleteRID'])){
-	$dbMan = new DatabaseManager();
-	if(!$dbMan->establishConnection()){
-		//database connection error
-		return;
-	}
-	$request = new Request('DELETE', 'se_Airline_Restrictions');
-	$request->addParameter('user_id', $_POST['deleteUID']);
-	$request->addParameter('restriction_id', $_POST['deleteRID']);
-	$request->transformCommand();
-	
-	$results = $dbMan->executeQuery($request);
-	
-	if($results != null){
-		//successfully removed			
-	}
-}
-//see all pending requests
-$dbMan = new DatabaseManager();
-
-if(!$dbMan->establishConnection()){
-	//database connection error
-	return;
-}
-
-$request = new Request ( 'SELECT *', 'se_Airline_Restrictions' );
-$request->addParameter ( 'status', 'PENDING_APPROVAL' );
-$request->transformCommand ();
-
-$results = $dbMan->executeQuery ( $request );
-
-if ($results == null) {
-	// request failed
-}
-
-$rows = $results->num_rows;
-?>	
-		<h1>Pending Restrictions</h1>
-		<h3>Airline Restrictions</h3>
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>Restriction ID</th>
-					<th>User ID</th>
-					<th>Airline Name</th>
-					<th>Status</th>
-					<th>Delete Restriction</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			if ($rows == 0) {
-				?>
-				<tr>
-					<td class="noResults" colspan="5">No results</td>
-				</tr>
-			<?php
-			}
-			for($i = 0; $i < $rows; ++ $i) {
-				$results->data_seek ( $i );
-				$row = $results->fetch_array ( MYSQLI_NUM );
-				
-				$restriction_id = $row [0];
-				$userID = $row [1];
-				$airline_name = $row [2];
-				$status= $row[3]
-				?>
-				<tr>
-					<td><?php echo $restriction_id; ?></td>
-					<td><?php echo $userID; ?></td>
-					<td><?php echo $airline_name; ?></td>
-					<td><?php echo $status; ?></td>
-					<td><?php
-				echo '<form action="manageUserRestrictions.php" method="POST">
-							<button type="submit" class="btn btn-danger">Remove</button>
-							<input type="hidden" name="AdeleteUID" value="user_id">
-							<input type="hidden" name="AdeleteRID" value="restriction_id" >
-						</form>';
-			}
-			
-			?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
-<!-- 	*************************************************************************** 
-Region Restrictions-->
-		<?php
-
-//delete a restriction
-if(isset($_POST['RdeleteUID']) &&isset($_POST['RdeleteRID'])){
-	$dbMan = new DatabaseManager();
-	if(!$dbMan->establishConnection()){
-		//database connection error
-		return;
-	}
-	$request = new Request('DELETE', 'se_Region_Restrictions');
-	$request->addParameter('user_id', $_POST['deleteUID']);
-	$request->addParameter('restriction_id', $_POST['deleteRID']);
-	$request->transformCommand();
-	
-	$results = $dbMan->executeQuery($request);
-	
-	if($results != null){
-		//successfully removed			
-	}
-}
-//see all pending requests
-$dbMan = new DatabaseManager();
-
-if(!$dbMan->establishConnection()){
-	//database connection error
-	return;
-}
-
-$request2 = new Request ( 'SELECT *', 'se_Region_Restrictions' );
-$request2->addParameter ( 'status', 'PENDING_APPROVAL' );
-$request2->transformCommand ();
-
-$results2 = $dbMan->executeQuery ( $request2 );
-
-if ($results2 == null) {
-	// request failed
-}
-
-$rows2 = $results2->num_rows;
-?>	
-		<h3>Region Restrictions</h3>
-		<table class="table table-hover">
-			<thead>
-				<tr>
-					<th>Restriction ID</th>
-					<th>User ID</th>
-					<th>Region Name</th>
-					<th>Status</th>
-					<th>Delete Restriction</th>
-				</tr>
-			</thead>
-			<tbody>
-			<?php
-			if ($rows2 == 0) {
-				?>
-				<tr>
-					<td class="noResults" colspan="5">No results</td>
-				</tr>
-			<?php
-			}
-			for($i = 0; $i < $rows; ++ $i) {
-				$results2->data_seek ( $i );
-				$row = $results2->fetch_array ( MYSQLI_NUM );
-				
-				$restriction_id = $row [0];
-				$user_id = $row [1];
-				$region=$row[2];
-				$status = $row [3];
-				?>
-				<tr>
-					<td><?php echo $restriction_id; ?></td>
-					<td><?php echo $user_id; ?></td>
-					<td><?php echo $region; ?></td>
-					<td><?php echo $status; ?></td>
-					<td><?php
-				echo '<form action="manageUserRestrictions.php" method="POST">
-							<button type="submit" class="btn btn-danger">Remove</button>
-							<input type="hidden" name="RdeleteUID" value="user_id">
-							<input type="hidden" name="RdeleteRID" value="restriction_id" >
-						</form>';
-			}
-			
-			?>
-					</td>
-				</tr>
-			</tbody>
-		</table>
+	<head>
+    	<?php require_once 'UI/styleIncludes.php'?>
+		<title>Manage User Restrictions</title>
 		
+		<script type="text/javascript">
+		$(document).ready(function(){
+			var url = window.location.toString();
+			url = url.split('?');
+			if(url[1] != undefined){
+				tabParameter = url[1].split('=')[1];
+				tabParameter = '#' + tabParameter;
+				
+				//remove active 
+				$('.nav.nav-tabs .active').removeClass('active');
+				$('.tab-content .active').removeClass('in active');
+				
+				$('.nav.nav-tabs li > a[href="' + tabParameter + '"]').parents('li').addClass('active');
+				$('.tab-content ' + tabParameter).addClass('in active');
+			}
+		});
+		</script>
+	</head>
+	<body>
+		<?php require_once 'requires.php';
+				require_once 'UI/navBar.php'; ?>
+				
+		<?php 
+
+			if(isset($_POST['DELETE_RESTRICTION_ID']) && $user->type == 'ADMINISTRATOR'){
+				$result = $user->removeRestrictionRequest($_POST['DELETE_RESTRICTION_ID'], $_POST['RESTRICTION_TABLE']);
+				
+				if($result){ showBanner('#restrictionDeleted');}
+				else{ showBanner('#error');}
+			}
+			else if (isset($_POST['REJECT_RESTRICTION_ID']) && $user->type == 'SUPER_USER'){
+				$result = $user->approveRestriction($_POST['REJECT_RESTRICTION_ID'], $_POST['RESTRICTION_TABLE'], false); 
+				
+				if($result){ showBanner('#restrictionRejected');}
+				else{ showBanner('#error');}
+			}
+			else if(isset($_POST['APPROVE_RESTRICTION_ID']) && $user->type == 'SUPER_USER'){
+				$result = $user->approveRestriction($_POST['APPROVE_RESTRICTION_ID'], $_POST['RESTRICTION_TABLE'], true);
 		
-<!-- 	************************************************************************** -->
-		<!-- Add a new restriction -->
-		<form action="addRestriction.php" method="POST">
-			<button type="submit" class="btn btn-success">Request a new
-				Restriction</button>
-		</form>
-	</div>
-</body>
+				if($result){ showBanner('#restrictionApproved');}
+				else{ showBanner('#error');}
+			}
+		?>
+		<div class="contents">
+			<div id="restrictionApproved" class="alert alert-success" style="display: none;">
+				<strong><i class="fa fa-check"></i>Restriction Approved.</strong>
+			</div>
+			<div id="restrictionRejected" class="alert alert-danger" style="display: none;">
+				<strong><i class="fa fa-times"></i>Restriction Rejected.</strong>
+			</div>
+			<div id="restrictionDeleted" class="alert alert-warning" style="display: none;">
+				<strong><i class="fa fa-trash"></i>Restriction Deleted.</strong>
+			</div>
+			<div id="error" class="alert alert-warning" style="display: none;">
+				<strong><i class="fa fa-times"></i>Error Occured.</strong>
+			</div>
+			<h1>Pending Restrictions</h1>
+			<?php 
+			if($user->type == 'ADMINISTRATOR' || $user->type == 'SUPER_USER'){
+			?>
+			<ul class="nav nav-tabs">
+				<li class="active"><a data-toggle="tab" href="#airline">Airline Restrictions</a></li>
+				<li><a data-toggle="tab" href="#region">Region Restrictions</a></li>
+			</ul>
+			<div class="tab-content">
+				<div id="airline" class="tab-pane fade in active">
+					<h3>Airline Restrictions</h3>
+					<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>User ID</th>
+								<th>Name</th>
+								<th>Restricted Airline</th>
+								<th>Status</th>
+								<th></th>
+								<?php if($user->type == 'SUPER_USER'){ echo "<th></th>";}?>
+							</tr>
+						</thead>	
+						<tbody>
+						<?php 
+							/* Create new instance of database manager */
+							$dbMan = new DatabaseManager();
+							
+							/* Establish Connection with the database */
+							if(!$dbMan->establishConnection()){
+								//database connection error
+								return;
+							}
+							
+							/* Create new request to get all pending airline restrictions */
+							$request = new Request('getPendingAirlineRestrictions', 'se_Airline_Restrictions');
+							$request->transformCommand();
+							
+							/* Execute query */
+							$results = $dbMan->executeQuery($request);
+							
+							
+							if($results == null){
+								//request failed
+							}
+							else{
+								
+								$rows = $results->num_rows;
+									
+								for ($i = 0 ; $i < $rows ; ++$i){
+									$results->data_seek($i);
+									$row = $results->fetch_array(MYSQLI_NUM);
+									
+									$userId = $row[1];
+									$restrictionId = $row[0];
+									$name = "$row[2] $row[3]";
+									$airline = $row[4];
+									$status = $row[5];
+									
+									echo "<tr>";
+									echo "<td>$userId</td>";
+									echo "<td>$name</td>";
+									echo "<td>$airline</td>";
+									echo "<td>$status</td>";
+									echo "<td>";
+									displayRestrictionButtons($user->type, $restrictionId, 'se_Airline_Restrictions');
+									echo "</td>";
+									echo "</tr>";
+								}
+								
+								if($rows <= 0){
+									echo "<tr><td>No items</td></tr>";
+								}
+							}
+						?>
+						</tbody>
+					</table>
+  				</div>
+  				<div id="region" class="tab-pane fade">
+    				<h3>Region Restrictions</h3>
+    				<table class="table table-hover">
+						<thead>
+							<tr>
+								<th>User ID</th>
+								<th>Name</th>
+								<th>Restricted Region</th>
+								<th>Status</th>
+								<th></th>
+								<?php if($user->type == 'SUPER_USER'){ echo "<th></th>";}?>
+							</tr>
+						</thead>	
+						<tbody>
+						<?php 
+							/* Create new instance of database manager */
+							$dbMan = new DatabaseManager();
+							
+							/* Establish Connection with the database */
+							if(!$dbMan->establishConnection()){
+								//database connection error
+								return;
+							}
+							
+							/* Create new request to get all pending airline restrictions */
+							$request = new Request('getPendingRegionRestrictions', 'se_Region_Restrictions');
+							$request->transformCommand();
+							
+							/* Execute query */
+							$results = $dbMan->executeQuery($request);
+							
+							
+							if($results == null){
+								//request failed
+							}
+							else{
+								
+								$rows = $results->num_rows;
+									
+								for ($i = 0 ; $i < $rows ; ++$i){
+									$results->data_seek($i);
+									$row = $results->fetch_array(MYSQLI_NUM);
+									
+									$userId = $row[1];
+									$restrictionId = $row[0];
+									$name = "$row[2] $row[3]";
+									$region = $row[4];
+									$status = $row[5];
+									
+									echo "<tr>";
+									echo "<td>$userId</td>";
+									echo "<td>$name</td>";
+									echo "<td>$region</td>";
+									echo "<td>$status</td>";
+									echo "<td>";
+									displayRestrictionButtons($user->type, $restrictionId, 'se_Region_Restrictions');
+									echo "</td>";
+									echo "</tr>";
+								}
+								
+								if($rows <= 0){
+									echo "<tr><td>No items</td></tr>";
+								}
+							}
+						?>
+						</tbody>
+					</table>
+  				</div>
+			</div>
+			<?php 
+				if($user->type == 'ADMINISTRATOR'){
+					?>
+						<a href="addRestriction.php" class="btn btn-success">Request a new Restriction</a>
+					<?php 
+				}
+			}?>
+		</div>
+	</body>
 </html>
+
+<?php 
+function displayRestrictionButtons($userType, $restrictionId, $restrictionTable){
+	$param = '';
+	if($restrictionTable == 'se_Region_Restrictions'){ $param = 'region';}
+	else{ $param = 'airline';}
+	
+	if($userType == 'SUPER_USER'){
+		echo "<form method='post' action='manageUserRestrictions.php?tab=$param'>";
+		echo "<input type='hidden' value='$restrictionId' name='REJECT_RESTRICTION_ID' />";
+		echo "<input type='hidden' value='$restrictionTable' name='RESTRICTION_TABLE' />";
+		echo "<button type='submit' class='btn btn-danger'>Reject</button>";
+		echo "</form></td><td>";
+		echo "<form method='post' action='manageUserRestrictions.php?tab=$param'>";
+		echo "<input type='hidden' value='$restrictionId' name='APPROVE_RESTRICTION_ID' />";
+		echo "<input type='hidden' value='$restrictionTable' name='RESTRICTION_TABLE' />";
+		echo "<button type='submit' class='btn btn-success'>Approve</button>";
+		echo "</form></td>";
+	}
+	if($userType == 'ADMINISTRATOR'){
+		echo "<form method='post' action='manageUserRestrictions.php?tab=$param'>";
+		echo "<input type='hidden' value='$restrictionId' name='DELETE_RESTRICTION_ID' />";
+		echo "<input type='hidden' value='$restrictionTable' name='RESTRICTION_TABLE' />";
+		echo "<button type='submit' class='btn btn-danger'>Delete</button>";
+		echo "</form>";
+		}
+}
+
+function showBanner($selector){
+	echo <<<_END
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('$selector').show();
+			});					
+		</script>
+_END;
+}
+?>

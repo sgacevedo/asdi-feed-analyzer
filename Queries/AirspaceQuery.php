@@ -33,7 +33,7 @@
 								.'<th>Airspace Id</th>'
 								.'<th>Airspace Point 1</th>'
 								.'<th>Airspace Point 2</th>'
-								.'<th>Number of Flights</th>'
+								.'<th>Number of Tracking Messages</th>'
 								.'<th></th>'
 							.'</tr>'
 						.'</thead>'

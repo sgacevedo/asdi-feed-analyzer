@@ -48,5 +48,38 @@
         	//command was not successfully executed.
         	return false;
         }
+        
+        public function removeRestrictionRequest($restrictionId, $restrictionTable){
+        	
+        	
+        	//create instance of Database Manager object
+        	$dbMan = new DatabaseManager();
+        	
+        	//establish connection
+        	//if returns false, connection failed
+        	if(!$dbMan->establishConnection()){
+        		//database connection error
+        		return false;
+        	}
+        	
+        	/* Create new request to remove restriction*/
+			$request = new Request('Delete Restriction', $restrictionTable);
+			$request->addParameter('restriction_id', $restrictionId);
+        	
+        	//transform the command to sql statement
+        	$request->transformCommand();
+        	
+        	//execute command
+        	$results = $dbMan->executeQuery($request);
+        	
+        	//if results is not null, command was successfully executed.
+        	if($results != null){
+        		//successfully approved
+        		return true;
+        	}
+        	
+        	//command was not successfully executed.
+        	return false;
+        }
     }
     ?>

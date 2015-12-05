@@ -90,7 +90,7 @@
 			
 			$table = $table . '</tbody></table>';
 			
-			if($rows > 0){
+			if($rows > 0 && $request->type != 'getProbabilityOfDelay'){
 				$table = $table . '<button type="button" class="btn btn-primary generateModel" onClick="' .$request->type. '(this)">Generate Model</button>';
 			}
 			

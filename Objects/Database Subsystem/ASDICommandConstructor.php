@@ -14,6 +14,18 @@
             else if($request->type == 'INSERT'){
             	$command = $this->insert($request);
             }
+      		else if($request->type == 'Delete Restriction'){
+            	$command = $this->deleteRestriction($request);
+            }
+            else if($request->type == 'Approve Restriction'){
+            	$command = $this->approveRestriction($request);
+            }
+            else if($request->type == 'getPendingAirlineRestrictions'){
+            	$command = $this->getPendingAirlineRestrictions();
+            }
+            else if($request->type == 'getPendingRegionRestrictions'){
+            	$command = $this->getPendingRegionRestrictions();
+            }
             else if($request->type == 'getDelaysByAirlines'){
             	$command = $this->getDelaysByAirlines($request);
             }
@@ -125,6 +137,18 @@
         	
         	return $command = $command . ''. $values;
         }
+        
+   		public function deleteRestriction($request){
+        	$command = "DELETE FROM $request->dbTable "
+        				."WHERE restriction_id = " . $request->fields['restriction_id'] . ";";
+        	return $command;
+        }
+        
+        public function approveRestriction($request){
+        	$command = "UPDATE $request->dbTable "
+        				."SET status = '" . $request->fields['status'] . "' WHERE restriction_id = " . $request->fields['restriction_id'] . ";";
+        	return $command;
+        }
         	
     	public function getAirlineRestrictions(){
         	$command = '';
@@ -169,6 +193,36 @@
         		$command = $command . ") ";
         	}
         	 
+        	return $command;
+        }
+        
+   		public function getPendingAirlineRestrictions(){
+        	$command = "SELECT "
+        					."r.restriction_id, "
+        					."r.user_id, "
+        					."u.firstName, "
+        					."u.lastName, "
+        					."r.airline_name, "
+        					."r.status "
+        				."FROM se_Airline_Restrictions as r "
+        					."INNER JOIN se_Users as u "
+        						."ON r.user_id = u.user_id "
+        				."WHERE r.status = 'PENDING_APPROVAL';";
+        	return $command;
+        }
+        
+        public function getPendingRegionRestrictions(){
+        	$command = "SELECT "
+        				."r.restriction_id, "
+        				."r.user_id, "
+        				."u.firstName, "
+        				."u.lastName, "
+        				."r.region, "
+        				."r.status "
+        			."FROM se_Region_Restrictions as r "
+        				."INNER JOIN se_Users as u "
+        					."ON r.user_id = u.user_id "
+        			."WHERE r.status = 'PENDING_APPROVAL';";
         	return $command;
         }
         

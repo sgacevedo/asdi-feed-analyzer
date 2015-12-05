@@ -32,7 +32,7 @@
 						<input type="hidden" name="AIRLINE_STARTDATE" class="startDate"/>
 						<input type="hidden" name="AIRLINE_ENDDATE" class="endDate" />
 						<div id="delaysByAirlines" class="checkbox">
-							<label><input type="checkbox" name="AIRLINE_DELAYS" value="" checked>List in order the airlines with the most delays</label>
+							<label><input type="checkbox" name="AIRLINE_DELAYS" value="" checked>List in order the airlines by the number of delayed flights</label>
 						</div>
 						<div id="airlineRegion" class="disabled">
 							<label for="region">Departure region: </label>
@@ -242,13 +242,15 @@
 						<input type="hidden" name="REGION_STARTDATE" class="startDate"/>
 						<input type="hidden" name="REGION_ENDDATE" class="endDate" />
 						<div id="delaysByRegions" class="checkbox">
-							<label><input type="checkbox" name="REGION_DELAYS" value="" checked disabled>List in order the regions with the most delays</label>
+							<label><input type="checkbox" name="REGION_DELAYS" value="" checked disabled>List in order the regions by the number of delayed flights</label>
 						</div>
 						<div style="margin-top: 20px">
 							<button type="submit" class="btn btn-success">Run</button>
 						</div>
 					</form>
-					<div class="results"><?php require_once 'Queries/RegionQuery.php';?></div>
+					<div class="results"><?php require_once 'Queries/RegionQuery.php';?>
+						<div class="model"></div>
+					</div>
     			</div>
   			</div>
         <?php

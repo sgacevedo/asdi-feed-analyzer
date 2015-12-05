@@ -13,46 +13,17 @@
 	<div class="contents">
 		<?php
 			
-			if(isset($_POST['approveUser'])){
-				$dbMan = new DatabaseManager();
+			if(isset($_POST['approveUser']) && $user->type == 'SUPER_USER'){
+				$result = $user->approveUser($_POST['approveUser'], true);
 				
-				if(!$dbMan->establishConnection()){
-					//database connection error
-					return;
-				}
-				
-				$request = new Request('UPDATE status', 'se_Users');
-				$request->addParameter('user_id', $_POST['approveUser']);
-				$request->addParameter('status', '"ACTIVE"');
-				$request->transformCommand();
-				
-				$results = $dbMan->executeQuery($request);
-				
-				if($results != null){
-					//successfully approved
-				}
-				
+				if($result){ showBanner('#userApproved');}
+				else{ showBanner('#error');}
 			}
-			else if(isset($_POST['denyUser'])){
+			else if(isset($_POST['denyUser']) && $user->type == 'SUPER_USER'){
+				$result = $user->approveUser($_POST['denyUser'], false);
 				
-				echo 'approve';
-				$dbMan = new DatabaseManager();
-				
-				if(!$dbMan->establishConnection()){
-					//database connection error
-					return;
-				}
-				
-				$request = new Request('DELETE', 'se_Users');
-				$request->addParameter('user_id', $_POST['approveUser']);
-				$request->transformCommand();
-				
-				$results = $dbMan->executeQuery($request);
-				
-				if($results != null){
-					//successfully denied
-					
-				}
+				if($result){ showBanner('#userDenied');}
+				else{ showBanner('#error');}
 			}
 			
 			if($_SESSION['user']->type == 'SUPER_USER'){
@@ -75,6 +46,15 @@
 				}
 				
 				$rows = $results->num_rows;?>
+		<div id="userApproved" class="alert alert-success" style="display: none;">
+			<strong><i class="fa fa-check"></i>User Approved.</strong>
+		</div>
+		<div id="userDenied" class="alert alert-danger" style="display: none;">
+			<strong><i class="fa fa-times"></i>User Denied.</strong>
+		</div>
+		<div id="error" class="alert alert-warning" style="display: none;">
+			<strong><i class="fa fa-times"></i>Error Occured.</strong>
+		</div>
 		<h1>Pending Accounts</h1>
 		<table class="table table-hover">
 			<thead>
@@ -129,3 +109,15 @@ _END
 	</div>
 </body>
 </html>
+
+<?php 
+function showBanner($selector){
+	echo <<<_END
+		<script type="text/javascript">
+			$(document).ready(function(){
+				$('$selector').show();
+			});
+		</script>
+_END;
+}
+?>

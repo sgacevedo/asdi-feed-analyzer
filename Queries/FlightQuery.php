@@ -40,7 +40,7 @@
 						.'</thead>'
 						.'<tbody>';
 		}
-		else if ($flightRadioButton == 'show_no_delays'){
+	else if ($flightRadioButton == 'show_no_delays'){
 			$request = new Request('getOnTimeFlights', 'se_Flights');
 			$request->addParameter('startDate', $_POST['FLIGHT_STARTDATE']);
 			$request->addParameter('endDate', $_POST['FLIGHT_ENDDATE']);
@@ -61,6 +61,29 @@
 							.'</tr>'
 						.'</thead>'
 						.'<tbody>';
+		}
+		else if ($flightRadioButton == 'show_all'){
+			$request = new Request('getAllFlights', 'se_Flights');
+			$request->addParameter('startDate', $_POST['FLIGHT_STARTDATE']);
+			$request->addParameter('endDate', $_POST['FLIGHT_ENDDATE']);
+			$request->addParameter('depart_airport', $departureAirport);
+			$request->addParameter('arrival_airport', $arrivalAirport);
+		
+			/* Create layout for table */
+			$table = '<table class="table table-hover">'
+					.'<thead>'
+					.'<tr>'
+						.'<th>Flight Number</th>'
+						.'<th>Departure Date</th>'
+						.'<th>Filed Departure Time</th>'
+						.'<th>Flown Departure Time</th>'
+						.'<th>Arrival Date</th>'
+						.'<th>Filed Arrival Time</th>'
+						.'<th>Flown Arrival Time</th>'
+						.'<th></th>'
+					.'</tr>'
+					.'</thead>'
+					.'<tbody>';
 		}
 		else if ($flightRadioButton == 'show_amendments'){
 			$request = new Request('getFlightCancelations', 'se_Flights');
@@ -105,7 +128,6 @@
 		
 					$table = $table . '<td>'. $row[$j] .'</td>';
 				}
-				$table = $table . '</tr>';
 	
 				if($request->type == 'getDelayedFlights'){
 					
@@ -119,6 +141,16 @@
 						$delaySum += $delay;
 					}
 				}
+				else if($request->type == 'getAllFlights' && $rows > 0){
+					if(($row[3] > $row[2]) || ($row[6] > $row[5])){
+						$table = $table . '<td><span class="label label-danger">Delayed</span></td></tr>';
+					}
+					else{
+						$table = $table . '<td><span class="label label-success">On-Time</span></td></tr>';
+					}
+				}
+				
+				$table = $table . '</tr>';
 			}
 				
 			if($rows == 0){

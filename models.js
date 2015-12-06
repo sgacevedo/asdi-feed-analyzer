@@ -1,3 +1,4 @@
+/*AIRLINES*/
 function getDelaysByAirlines(button){
 	button.remove();
 	var outputContainer = $('#airlines .results .model');
@@ -8,6 +9,18 @@ function getDelaysByAirlines(button){
 	createColumnChart(outputContainer, xAxis, yAxis, values, title);
 }
 
+/*AIRPORTS*/
+function getAirportsByDelays(button){
+	button.remove();
+	var outputContainer = $('#airports .results .model');
+	var xAxis = $('#airports .results table tr td:nth-child(1)');
+	var yAxis = $('#airports .results table tr th:nth-child(2)').html();
+	var values = $('#airports .results table tr td:nth-child(2)');
+	var title = "Number of Delayed Departures By Airport"
+	createColumnChart(outputContainer, xAxis, yAxis, values, title);
+}
+
+/*REGIONS*/
 function getDelaysByRegions(button){
 	button.remove();
 	var outputContainer = $('#regions .results .model');
@@ -15,6 +28,16 @@ function getDelaysByRegions(button){
 	var yAxis = $('#regions .results table tr th:nth-child(2)').html();
 	var values = $('#regions .results table tr td:nth-child(2)');
 	var title = "Number of Delayed Flights by Regions"
+	createColumnChart(outputContainer, xAxis, yAxis, values, title);
+}
+
+function getOnTimeByRegions(button){
+	button.remove();
+	var outputContainer = $('#regions .results .model');
+	var xAxis = $('#regions .results table tr td:nth-child(1)');
+	var yAxis = $('#regions .results table tr th:nth-child(2)').html();
+	var values = $('#regions .results table tr td:nth-child(2)');
+	var title = "Number of On-Time Flights by Regions"
 	createColumnChart(outputContainer, xAxis, yAxis, values, title);
 }
 

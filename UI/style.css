@@ -170,3 +170,7 @@ i{
   padding: 0;
   font-size: 20pt;
 }
+.export{
+  margin-top: 10px;
+  display: none;
+}

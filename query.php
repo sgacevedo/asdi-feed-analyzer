@@ -3,15 +3,6 @@
         <?php
             require_once 'UI/styleIncludes.php' ?>
         <title>ASDI Query</title>
-        <style type="text/css">
-        	.export{
-        		display: none;
-        		float: right;
-        	}
-        	.generateModel{
-        		float: left;
-        	}
-        </style>
     </head>
     <body>
         <?php
@@ -122,6 +113,7 @@
 						</div>
       				</form>
       				<div class="results"><?php require_once 'Queries/AirportQuery.php';?>
+      					<div class="model"></div>
       					<div class="export"><button type="button" class="btn btn-success">Export Report</button></div>
       				</div>
     			</div>
@@ -141,6 +133,9 @@
 										<label for="airport">List Airpsaces By: </label>
 									    <div class="radio">
 											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByFlights" checked>Number of flights</label>
+										</div>
+										<div class="radio">
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByTracking" >Number of tracking messages</label>
 										</div>
 										<div class="radio">
 											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays">Number of delayed flights</label>
@@ -190,6 +185,9 @@
 							</div>
 							<div class="radio">
 							  	<label><input type="radio" name="FLIGHTS_SELECT" value="show_no_delays" >Show on-time Flights</label>
+							</div>
+							<div class="radio">
+							  	<label><input type="radio" name="FLIGHTS_SELECT" value="show_all" >Show all Flights</label>
 							</div>
 							<div class="radio">
 							  	<label><input type="radio" name="FLIGHTS_SELECT" value="show_amendments" >Show Cancellations and Amendements</label>
@@ -258,8 +256,11 @@
 						</div>
 						<input type="hidden" name="REGION_STARTDATE" class="startDate"/>
 						<input type="hidden" name="REGION_ENDDATE" class="endDate" />
-						<div id="delaysByRegions" class="checkbox">
-							<label><input type="checkbox" name="REGION_DELAYS" value="" checked disabled>List in order the regions by the number of delayed flights</label>
+						<div class="radio">
+							<label><input type="radio" name="REGION_FLIGHTS" value="delayed" checked>List in order the regions by the number of delayed flights</label>
+						</div>
+						<div class="radio">
+							<label><input type="radio" name="REGION_FLIGHTS" value="onTime">List in order the regions by the number of on-time flights</label>
 						</div>
 						<div style="margin-top: 20px">
 							<button type="submit" class="btn btn-success">Run</button>

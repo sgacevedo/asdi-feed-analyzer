@@ -25,10 +25,12 @@ $(function() {
         $('.startDate').val(startDate);
         $('.endDate').val(endDate);
     }
-    cb(moment().subtract(29, 'days'), moment());
+    cb(moment().startOf('year'), moment().endOf('year'));
 
     $('.dateRange').daterangepicker({
     	showDropdowns: true,
+    	startDate: moment().startOf('year'),
+    	endDate: moment().endOf('year'),
         ranges: {
            /*'Today': [moment(), moment()],*/
            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],

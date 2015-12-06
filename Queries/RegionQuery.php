@@ -12,23 +12,45 @@
 			//database connection error
 			return;
 		}
+		
+		$regionRadioButton = $_POST['REGION_FLIGHTS'];
+		
+		if($regionRadioButton == 'delayed'){
+			/* Create new request to get airports by delays */
+			$request = new Request('getDelaysByRegions', 'se_Flights');
 			
-		/* Create new request to get airports by delays */
-		$request = new Request('getDelaysByRegions', 'se_Flights');
-		
-		/* Pass in date range variables */
-		$request->addParameter('startDate', $_POST['REGION_STARTDATE']);
-		$request->addParameter('endDate', $_POST['REGION_ENDDATE']);
-		
-		/* Create layout for table */
-		$table = '<table class="table table-hover">'
-					.'<thead>'
-						.'<tr>'
-							.'<th>Region</th>'
-							.'<th>Number of Delays</th>'
-						.'</tr>'
-					.'</thead>'
+			/* Pass in date range variables */
+			$request->addParameter('startDate', $_POST['REGION_STARTDATE']);
+			$request->addParameter('endDate', $_POST['REGION_ENDDATE']);
+			
+			/* Create layout for table */
+			$table = '<table class="table table-hover">'
+						.'<thead>'
+							.'<tr>'
+								.'<th>Region</th>'
+								.'<th>Number of Delayed Flights</th>'
+							.'</tr>'
+						.'</thead>'
+						.'<tbody>';
+		}
+		else if($regionRadioButton == 'onTime'){
+			/* Create new request to get airports by delays */
+			$request = new Request('getOnTimeByRegions', 'se_Flights');
+			
+			/* Pass in date range variables */
+			$request->addParameter('startDate', $_POST['REGION_STARTDATE']);
+			$request->addParameter('endDate', $_POST['REGION_ENDDATE']);
+			
+			/* Create layout for table */
+			$table = '<table class="table table-hover">'
+						.'<thead>'
+							.'<tr>'
+								.'<th>Region</th>'
+								.'<th>Number of On-Time Flights</th>'
+							.'</tr>'
+						.'</thead>'
 					.'<tbody>';
+		}
 		
 		/* Transform the request into a command */
 		$request->transformCommand();

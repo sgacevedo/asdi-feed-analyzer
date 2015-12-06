@@ -18,9 +18,32 @@
 		
 		/* If the user has selected to rank airspaces by flights */
 		if($airspaceRadioButton == "rankByFlights"){
-			
+				
 			/* Create new request to get airspaces by flights */
 			$request = new Request('getAirspacesByFlights', 'se_Airspaces');
+				
+			/* Pass in date range variables */
+			$request->addParameter('startDate', $_POST['AIRSPACE_STARTDATE']);
+			$request->addParameter('endDate', $_POST['AIRSPACE_ENDDATE']);
+				
+			/* Create layout for table */
+			$table = '<table class="table table-hover">'
+					.'<thead>'
+					.'<tr>'
+						.'<th>Airspace Id</th>'
+						.'<th>Airspace Point 1</th>'
+						.'<th>Airspace Point 2</th>'
+						.'<th>Number of Flights</th>'
+						.'<th></th>'
+					.'</tr>'
+					.'</thead>'
+					.'<tbody>';
+		}
+		/* If the user has selected to rank airspaces by tracking messages */
+		else if($airspaceRadioButton == "rankByTracking"){
+			
+			/* Create new request to get airspaces by flights */
+			$request = new Request('getAirspacesByTrackingMessages', 'se_Airspaces');
 			
 			/* Pass in date range variables */
 			$request->addParameter('startDate', $_POST['AIRSPACE_STARTDATE']);
@@ -66,6 +89,25 @@
 		/* If the user has selected to rank the airspaces by number of messages*/
 		else if($airspaceRadioButton == 'rankByMessages'){
 		
+		/* Create new request to get airspaces by flights */
+		$request = new Request('getAirspacesByCancelations', 'se_Airspaces');
+		
+		/* Pass in date range variables */
+		$request->addParameter('startDate', $_POST['AIRSPACE_STARTDATE']);
+		$request->addParameter('endDate', $_POST['AIRSPACE_ENDDATE']);
+		
+		/* Create layout for table */
+		$table = '<table class="table table-hover">'
+				.'<thead>'
+				.'<tr>'
+					.'<th>Airspace Id</th>'
+					.'<th>Airspace Point 1</th>'
+					.'<th>Airspace Point 2</th>'
+					.'<th>Number of Cancelation Messages</th>'
+					.'<th></th>'
+				.'</tr>'
+				.'</thead>'
+				.'<tbody>';
 		}
 		
 		/* Transform the request into a command */

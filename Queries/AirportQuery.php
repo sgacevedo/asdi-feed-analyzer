@@ -119,6 +119,10 @@
 			
 			$table = $table . '</tbody></table>';
 			
+			if($rows > 0 && $request->type == 'getAirportsByDelays'){
+				$table = $table . '<button type="button" class="btn btn-primary generateModel" onClick="' .$request->type. '(this)">Generate Model</button>';
+			}
+			
 			if($request->type == 'getDelayedDeparturesByAirport'){
 				$table = $table . '<h4>Number of delayed flights departing from ' . $request->fields['airport'] . ' between ' . $request->fields['startDate'] . ' and ' . $request->fields['endDate'] . ': <span class="label label-default">' . $rows . '</span></h4>';
 			}

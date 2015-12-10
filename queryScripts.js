@@ -65,6 +65,7 @@ $(function() {
     	if(selectedRadio == 'one_airport'){
     		$(this).siblings('select').removeAttr('disabled');
     		$('#delaySelect input[value="delayed_arrivals"]').removeAttr('disabled');
+			$('#delaySelect input[value="delayed_percentage"]').removeAttr('disabled');
     	}
     	else if(selectedRadio == 'all_airports'){
     		$('input[value="one_airport"]').siblings('select').attr('disabled', 'disabled');

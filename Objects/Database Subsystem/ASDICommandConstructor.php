@@ -44,9 +44,12 @@
             else if($request->type == 'getAirportsByDelays'){
             	$command = $this->getAirportsByDelays($request);
             }
-       	 	else if($request->type == 'getDelayedDeparturesByAirport'){
-            	$command = $this->getDelayedDeparturesByAirport($request);
+       	 	else if($request->type == 'getPercentageDelayedDeparturesByAirport'){
+            	$command = $this->getPercentageDelayedDeparturesByAirport($request);
             }
+			else if($request->type == 'getDelayedDeparturesByAirport'){
+				$command = $this->getDelayedDeparturesByAirport($request);
+			}
             else if($request->type == 'getDelayedArrivalsByAirport'){
             	$command = $this->getDelayedArrivalsByAirport($request);
             }
@@ -254,6 +257,23 @@
         	
         	return $command;
         }
+
+		/*public function getPercentageDelaysByAirlines($request){
+			$command = "SELECT f.airline_name, COUNT(f.airline_name) "
+					."FROM se_Flights f "
+					."INNER JOIN se_Departure d "
+					."ON f.flight_number = d.flight_number "
+					."INNER JOIN se_Arrival a "
+					."ON f.flight_number = a.flight_number "
+					."WHERE "
+					."f.departure_date >= '" . $request->fields['startDate'] . "' "
+					."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+					.$this->getAirlineRestrictions()
+					. "GROUP BY f.airline_name "
+					."ORDER BY COUNT(f.airline_name) DESC;";
+
+			return $command;
+		}*/
         
         public function getProbabilityOfDelay($request){
         	$command = "SELECT f.flight_number, f.airline_name, f.departure_date, f.departure_airport, a.region, f.departure_time, d.departure_time "
@@ -327,6 +347,17 @@
 						."AND f.departure_airport = '" . $request->fields['airport'] . "';";
         	return $command;	
         }
+
+		public function getPercentageDelayedDeparturesByAirport($request){
+			$command = "SELECT f.flight_number, f.departure_date, f.departure_time as filed_time, d.departure_time as flown_time "
+					."FROM se_Flights f "
+					."INNER JOIN se_Departure d "
+					."ON f.flight_number = d.flight_number "
+					."WHERE f.departure_date >= '" . $request->fields['startDate'] . "' "
+					."AND f.departure_date <= '" . $request->fields['endDate'] . "' "
+					."AND f.departure_airport = '" . $request->fields['airport'] . "';";
+			return $command;
+		}
         
         public function getDelayedArrivalsByAirport($request){
         	$command = "SELECT f.flight_number, f.arrival_date, f.arrival_time as filed_time, a.arrival_time as flown_time "

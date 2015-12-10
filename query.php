@@ -107,6 +107,9 @@
 							<div class="radio">
 							  	<label><input type="radio" name="AIRPORT_DELAY_RADIO" value="delayed_arrivals" disabled>Show delayed arrivals</label>
 							</div>
+							<div class="radio">
+								<label><input type="radio" name="AIRPORT_DELAY_RADIO" value="delayed_percentage" disabled>Show % of delayed departures of an airport</label>
+							</div>
 						</div>
 						<div style="margin-top: 20px">
 							<button type="submit" class="btn btn-success">Run</button>

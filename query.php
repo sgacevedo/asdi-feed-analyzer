@@ -134,17 +134,17 @@
 									<input type="hidden" name="AIRSPACE_ENDDATE" class="endDate" />
 									<div id="airspaceSelect" class="" style="margin-top: 10px">
 										<label for="airport">List Airpsaces By: </label>
-									    <div class="radio">
+									    <!--<div class="radio">
 											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByFlights" checked>Number of flights</label>
-										</div>
+										</div>-->
 										<div class="radio">
 											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByTracking" >Number of tracking messages</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays">Number of delayed flights</label>
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByDelays">Number of delayed tracking messages</label>
 										</div>
 										<div class="radio">
-											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByMessages">Number of cancelation messages</label>
+											<label><input type="radio" name="AIRSPACE_RADIO" value="rankByMessages">Number of cancellation messages</label>
 										</div>
 									</div>
 									<div style="margin-top: 20px">
@@ -227,7 +227,7 @@
 						</div>
 						<label for="messagesSelect" style="margin-top: 20px;">Select Types of Messages: </label>
 						<div id="messagesSelect" class="checkbox" style="margin-top: 0px !important;">
-							<label><input type="checkbox" name="MESSAGES_AMENDMENTS" value="" >Amendments/Cancelations</label><br />
+							<label><input type="checkbox" name="MESSAGES_AMENDMENTS" value="" >Amendments/cancellations</label><br />
 							<label><input type="checkbox" name="MESSAGES_CROSSINGS" value="" >Crossings</label><br />
 							<label><input type="checkbox" name="MESSAGES_DEPARTURES" value="" >Departures</label><br />
 							<label><input type="checkbox" name="MESSAGES_ARRIVALS" value="" >Arrivals</label><br />

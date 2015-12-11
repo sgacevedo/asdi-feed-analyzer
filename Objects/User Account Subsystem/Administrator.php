@@ -35,6 +35,7 @@
         
         	//transform the command to sql statement
         	$request->transformCommand();
+        	//echo $request->command;
         
         	//execute command
         	$results = $dbMan->executeQuery($request);

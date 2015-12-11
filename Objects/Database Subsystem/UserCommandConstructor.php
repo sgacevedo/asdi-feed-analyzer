@@ -128,12 +128,18 @@
                 }
             }
 
-            else if($request->type == 'selectActiveUsers'){
+        	else if($request->type == 'selectActiveUsers'){
             	 $command = "SELECT U.user_id, U.firstName, U.lastName, AR.restriction_id, AR.airline_name "
             	 			."FROM se_Users AS U "
             	 			."INNER JOIN se_Airline_Restrictions as AR "
             	 				."ON AR.user_id = U.user_id "
             	 			."WHERE U.status = '" . $request->fields['status'] . "';";
+            }
+            
+            else if($request->type == 'selectGeneralUsers'){
+            	$command = "SELECT * "
+            			."FROM se_Users "
+            			."WHERE type = 'GENERAL_USER' ORDER BY lastName;";
             }
             
             //return command string;

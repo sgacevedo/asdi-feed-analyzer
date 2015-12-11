@@ -160,7 +160,7 @@
 			$table = $table . '</tbody></table>';
 			
 			if($request->type == 'getDelayedFlights' && $rows > 0){
-				$table = $table . '<h4>Number of delayed flights from ' . $request->fields['depart_airport'] . ' to ' . $request->fields['arrival_airport'] . ' between ' . $request->fields['startDate'] . ' and ' . $request->fields['endDate'] . ': <span class="label label-default">' . $rows . '</span></h4>';
+				$table = $table . '<h5 style="float: right">Number of delayed flights from ' . $request->fields['depart_airport'] . ' to ' . $request->fields['arrival_airport'] . ' between ' . $request->fields['startDate'] . ' and ' . $request->fields['endDate'] . ': <span class="label label-default">' . $rows . '</span></h5>';
 				$table = $table . '<h4>Average Delay Time: <span class="label label-default">' . round($delaySum/$rows, 2) . ' minutes</span></h4>';
 			}
 			else if($request->type == 'getOnTimeFlights' && $rows > 0){

@@ -47,7 +47,7 @@
 				return;
 			}
 			
-			$request = new Request ('SELECT *', 'se_Users');
+			$request = new Request ('selectGeneralUsers', 'se_Users');
 			$request->transformCommand();
 			
 			$users = $dbMan->executeQuery($request);
@@ -122,7 +122,7 @@
 			<select id="user" class="form-control user" style="width: 400px">
 				<?php getUsers();?>
 			</select>
-			<input type="hidden" name="AIRLINE_USER" value="2"/>
+			<input type="text" name="AIRLINE_USER" value="" style="display:none"/>
 			<label for="airline">Restricted Airline: </label>
 			<select id="airline" class="form-control" style="width: 400px" name="AIRLINE">
 				<?php getAirlines();?>
@@ -137,7 +137,7 @@
 			<select id="user" class="form-control user" style="width: 400px">
 				<?php getUsers();?>
 			</select>
-			<input type="hidden" name="REGION_USER" value="2"/>
+			<input type="text" name="REGION_USER" value="" style="display:none"/>
 			<label for="region">Restricted Region: </label>
 			<select id="region" class="form-control" style="width: 400px" name="REGION">
 				<option>West</option>
